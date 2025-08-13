@@ -5,7 +5,7 @@
 5. urgencia caso haja 
 6. receber arquivos .txt
 7. agendar cada consulta com horarios separados
-
+.\CRUDRENE.exe
 -----------------------------------------------------------------------------------------------
 o que eu for implementado eu coloco aq embaixo
 .

@@ -2,6 +2,7 @@
 #define SISTEMA_CONSULTA
 #define TAM_MINIMO 20 //declaracao para strings
 #define TAM_MAXIMO 64 //declaracao para strings
+#define TAMANHO_BUFFER 100
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -81,7 +82,6 @@ Consulta *itens;
 int qtd; 
 int cap;
 } VetConsultas;
-
 /*
 typedef struct {
 int duracaoPadraoMin; // ex.: 30 minutos
@@ -92,5 +92,6 @@ int prioridadeUrgentePrimeiro;// 1: sempre tentar marcar urgente no 1o slot livr
 //isso aq eu vou ver dps
 
 //funcoes aqui embaixo ----------
+void ler_buffer(char buffer[]);
 
 #endif
