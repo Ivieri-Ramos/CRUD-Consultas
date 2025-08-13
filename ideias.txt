@@ -1,0 +1,11 @@
+1. implementar alocação dinamica de memoria
+2. implementar medicos e a especialidade de cada um
+3. implementar pacientes
+4. tempos, horario e duracao de cada consulta
+5. urgencia caso haja 
+6. receber arquivos .txt
+7. agendar cada consulta com horarios separados
+
+-----------------------------------------------------------------------------------------------
+o que eu for implementado eu coloco aq embaixo
+.
