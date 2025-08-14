@@ -3,6 +3,10 @@
 #define TAM_MINIMO 20 //declaracao para strings
 #define TAM_MAXIMO 64 //declaracao para strings
 #define TAMANHO_BUFFER 100
+#define MINIMO_OP 1
+#define MAXIMO_OP 9
+#define PROTOCOLO_MEDICO 0
+#define PROTOCOLO_PACIENTE 1
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -93,5 +97,9 @@ int prioridadeUrgentePrimeiro;// 1: sempre tentar marcar urgente no 1o slot livr
 
 //funcoes aqui embaixo ----------
 void ler_buffer(char buffer[]);
+int verificartoken(char *token, long *numero, int limite_menor, int limite_maior);
+void imprimir_opcoes();
+void Limpar_Tela();
+void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maior);
 
 #endif
