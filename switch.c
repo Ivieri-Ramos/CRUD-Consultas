@@ -3,18 +3,14 @@
 int main(){
     long op;
     char buffer[TAMANHO_BUFFER];
-    Medico classe_medica[10];
-    Paciente classe_paciente[10];
-
+    VetMedicos vetor_medicos = {NULL, 0, 0};
+    VetPacientes vetor_pacientes = {NULL, 0, 0};
+    VetConsultas vetor_consultas = {NULL, 0, 0};
+    inicializar_medico(&vetor_medicos);
+    
     while(1){
         imprimir_opcoes();
-        while(1){/*
-            ler_buffer(buffer);
-            token = strtok(buffer, "\n");
-            if (!verificartoken(token, &op, MINIMO_OP, MAXIMO_OP))
-            continue;
-                else
-                break;*/
+        while(1){
                 buffer_completo(buffer, &op, MINIMO_OP, MAXIMO_OP);
                 break;
         }
@@ -23,7 +19,8 @@ int main(){
             Limpar_Tela();
             printf("Digite 0 para adicionar um medico ou 1 para adicionar um paciente: ");
             buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-            
+            if (op == PROTOCOLO_MEDICO)
+
             break;
             case 2: //remover medico/paciente
             case 3: //listar todos os medicos/pacientes

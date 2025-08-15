@@ -58,3 +58,23 @@ void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maio
             break;
         }
 }
+/*
+void protocolo_adicionar(long num_protocolo){
+    switch (num_protocolo){
+        case 0:
+        
+    }
+}
+*/
+void inicializar_medico(VetMedicos *ptr){
+    if (ptr -> cap == ptr -> qtd){
+        ptr -> cap += 10;
+        Medico *ponteiro_temp;
+        ponteiro_temp = realloc(ptr -> ponteiro_med, ptr -> cap * sizeof(Medico));
+        if (ponteiro_temp == NULL){
+            printf("Falha ao alocar memoria, fechando...");
+            exit(1);
+        }
+        ptr -> ponteiro_med = ponteiro_temp;
+    }
+}

@@ -70,19 +70,19 @@ int prioridade; // 0 normal; 1 urgente (para ?inteligente?/fila)
 } Consulta;
 
 typedef struct {
-Medico *itens; 
+Medico *ponteiro_med; 
 int qtd; 
 int cap;
 } VetMedicos;
 
 typedef struct {
-Paciente *itens; 
+Paciente *ponteiro_pac; 
 int qtd; 
 int cap;
 } VetPacientes;
 
 typedef struct {
-Consulta *itens; 
+Consulta *ponteiro_con; 
 int qtd; 
 int cap;
 } VetConsultas;
@@ -101,5 +101,5 @@ int verificartoken(char *token, long *numero, int limite_menor, int limite_maior
 void imprimir_opcoes();
 void Limpar_Tela();
 void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maior);
-
+void inicializar_medico(VetMedicos *ptr);
 #endif
