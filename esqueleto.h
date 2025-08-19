@@ -21,7 +21,7 @@
 #include <time.h> //esse vou ver se vou usar
 
 #ifdef _WIN32
-#include <windows.h> //usar sleep
+#include <windows.h> //usar Sleep
     #else
     #include <unistd.h> //usar sleep
 #endif
@@ -113,14 +113,15 @@ int verificartoken(char *token, long *numero, int limite_menor, int limite_maior
 void imprimir_opcoes();
 void Limpar_Tela();
 void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maior);
-void inicializar_medico(VetMedicos *ptr);
-void inicializar_paciente(VetPacientes *ptr);
-void inicializar_consulta(VetConsultas *ptr);
+void redimensionar_vetor_medico(VetMedicos *ptr);
+void redimensionar_vetor_paciente(VetPacientes *ptr);
+void redimensionar_vetor_consulta(VetConsultas *ptr);
 void adicionar_medico(VetMedicos *ptr);
 void Retirar_Enter(char nome[TAM_MAXIMO]);
-void definir_especialidade(VetMedicos *ptr);
-void adicionar_manha(Horario *ptr);
-void adicionar_tarde(Horario *ptr);
+void definir_especialidade(Medico *ptr);
+void definir_horario(Horario *ptr, int limite_menor, int limite_maior);
 void pausar_programa(int segundos);
+int definir_id(void *ptr, int protocolo);
+void adicionar_paciente(VetPacientes *ptr);
 
 #endif

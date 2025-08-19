@@ -1,0 +1,21 @@
+// Em adicionar_medico, depois de ler os 4 horários
+
+// Validação Lógica da Manhã
+while (medico_atual->Fim_Manha.hora < medico_atual->Inicio_Manha.hora || 
+      (medico_atual->Fim_Manha.hora == medico_atual->Inicio_Manha.hora && 
+       medico_atual->Fim_Manha.minuto <= medico_atual->Inicio_Manha.minuto)) {
+    
+    printf("\nErro: O horario final da manha deve ser apos o horario inicial.\n");
+    printf("Por favor, insira os horarios da manha novamente.\n\n");
+    
+    printf("---Escolha inicio da manha---\n");
+    definir_horario(&medico_atual->Inicio_Manha, MANHA_MIN, MANHA_MAX);
+    printf("---Escolha fim da manha---\n");
+    definir_horario(&medico_atual->Fim_Manha, MANHA_MIN, MANHA_MAX);
+}
+
+// Fazer a mesma lógica de validação para o período da tarde...
+
+Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as três funções de redimensionamento (redimensionar_vetor_medico, _paciente, _consulta), que são quase idênticas. Isso reduzirá a repetição de código.
+
+

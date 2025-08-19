@@ -66,7 +66,7 @@ void protocolo_adicionar(long num_protocolo){
     }
 }
 */
-void inicializar_medico(VetMedicos *ptr){
+void redimensionar_vetor_medico(VetMedicos *ptr){
     if (ptr -> cap == ptr -> qtd){
         ptr -> cap += 10;
         Medico *ponteiro_temp;
@@ -80,7 +80,7 @@ void inicializar_medico(VetMedicos *ptr){
 }
 
 
-void inicializar_paciente(VetPacientes *ptr){
+void redimensionar_vetor_paciente(VetPacientes *ptr){
     if (ptr -> cap == ptr -> qtd){
         ptr -> cap += 10;
         Paciente *ponteiro_temp;
@@ -93,7 +93,7 @@ void inicializar_paciente(VetPacientes *ptr){
     }
 }
 
-void inicializar_consulta(VetConsultas *ptr){
+void redimensionar_vetor_consulta(VetConsultas *ptr){
     if (ptr -> cap == ptr -> qtd){
         ptr -> cap += 10;
         Consulta *ponteiro_temp;
@@ -108,29 +108,29 @@ void inicializar_consulta(VetConsultas *ptr){
 void adicionar_medico(VetMedicos *ptr){
     int i;
     if (ptr -> cap == ptr -> qtd){
-        inicializar_medico(ptr);
+        redimensionar_vetor_medico(ptr);
     }
     i = ptr -> qtd;
-    ptr -> ponteiro_med[i].id = 1000 + i;
+    ptr -> ponteiro_med[i].id = definir_id(ptr, PROTOCOLO_MEDICO);
     printf("Digite o nome do medico: ");
     fgets(ptr -> ponteiro_med[i].nome, TAM_MAXIMO, stdin);
     Retirar_Enter(ptr -> ponteiro_med[i].nome);
     
     Limpar_Tela();
-    definir_especialidade(&ptr -> ponteiro_med[i].especialidade);
+    definir_especialidade(&ptr -> ponteiro_med[i]);
     
     printf("Hora de definir o horario, defina entra 08:00(inicio) e 12:59(fim)\n\n");
     
     printf("---Escolha inicio da manha---\n");
-    adicionar_manha(&ptr -> ponteiro_med[i].Inicio_Manha);
+    definir_horario(&ptr -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
     printf("---Escolha fim da manha---\n");
-    adicionar_manha(&ptr -> ponteiro_med[i].Fim_Manha);
+    definir_horario(&ptr -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
     
     printf("Hora de definir o horario, defina entra 14:00(inicio) e 18:59(fim)\n\n");
     printf("---Escolha inicio da tarde---\n");
-    adicionar_tarde(&ptr -> ponteiro_med[i].Inicio_Tarde);
+    definir_horario(&ptr -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
     printf("---Escolha fim da tarde---\n");
-    adicionar_tarde(&ptr -> ponteiro_med[i].Fim_Tarde);
+    definir_horario(&ptr -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
 
     ptr -> qtd++;
     printf("Novo medico adicionado!\n");
@@ -142,7 +142,7 @@ void Retirar_Enter(char nome[TAM_MAXIMO]){
     nome[strcspn(nome, "\n")] = '\0';
 }
 
-void definir_especialidade(VetMedicos *ptr){
+void definir_especialidade(Medico *ptr){
     char buffer[TAMANHO_BUFFER];
     long valor;
     printf("---Defina a especialidade do medico---\n");
@@ -153,78 +153,30 @@ void definir_especialidade(VetMedicos *ptr){
     printf("Digite 4 para ESPEC_OUTRA;\n");
     printf("Digite aqui: ");
     buffer_completo(buffer, &valor, ESPEC_CLINICO, ESPEC_OUTRA);
-    ptr -> ponteiro_med -> especialidade = (int) valor;
+    ptr -> especialidade = (int) valor;
     Limpar_Tela();
 }
 
-void adicionar_manha(Horario *ptr){
+void definir_horario(Horario *ptr, int limite_menor, int limite_maior){
     char buffer[TAMANHO_BUFFER];
     int qtd_lidos;
-    printf("Digite no formato HH:MM(ex - 09:30)\n");
+    printf("Digite no formato HH:MM(ex - 13:30)\n");
     while(1){
         printf("Digite aqui: ");
         ler_buffer(buffer);
         qtd_lidos = sscanf(buffer, "%d:%d", &ptr -> hora, &ptr -> minuto);
 
-        if (qtd_lidos == 2 && ptr -> hora < MANHA_MIN){
-            printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-            continue;
-        }   
-            else if (qtd_lidos == 2 && ptr -> hora > MANHA_MAX){
-                printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                continue;
-            }
-                else if (qtd_lidos == 2 && ptr -> minuto < MINUTOS_MIN){
-                    printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                    continue;
-                }
-                    else if (qtd_lidos == 2 && ptr -> minuto > MINUTOS_MAX){
-                        printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                        continue;
-                }   
-                        else if (qtd_lidos != 2 ){
-                            printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                            continue;
-                    }
-                            else
-                            break;
-                }
-    Limpar_Tela();
-}
-
-void adicionar_tarde(Horario *ptr){
-    char buffer[TAMANHO_BUFFER];
-    int qtd_lidos;
-    printf("Digite no formato HH:MM(ex - 15:30)\n");
-    while(1){
-        printf("Digite aqui: ");
-        ler_buffer(buffer);
-        qtd_lidos = sscanf(buffer, "%d:%d", &ptr -> hora, &ptr -> minuto);
-
-        if (qtd_lidos == 2 && ptr -> hora < TARDE_MIN){
-            printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-            continue;
-        }   
-            else if (qtd_lidos == 2 && ptr -> hora > TARDE_MAX){
-                printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                continue;
-            }
-                else if (qtd_lidos == 2 && ptr -> minuto < MINUTOS_MIN){
-                    printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                    continue;
-                }
-                    else if (qtd_lidos == 2 && ptr -> minuto > MINUTOS_MAX){
-                        printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                        continue;
-                }   
-                        else if (qtd_lidos != 2 ){
-                            printf("Formato invalido, por favor, digite no formato HH:MM!\n");
-                            continue;
-                    }
-                            else
-                            break;
-            }
-    Limpar_Tela();
+        if (qtd_lidos != 2 || 
+            ptr->hora < limite_menor || 
+            ptr->hora > limite_maior || 
+            ptr->minuto < MINUTOS_MIN || 
+            ptr->minuto > MINUTOS_MAX){
+            printf("Formato invalido, por favor, digite no formato HH:MM dentro do limite permitido!\n");
+        }
+        else
+        break;
+    }
+    Limpar_Tela();    
 }
 
 void pausar_programa(int segundos) {
@@ -233,4 +185,60 @@ void pausar_programa(int segundos) {
         #else
             sleep(segundos);
     #endif
+}
+
+void adicionar_paciente(VetPacientes *ptr){
+    int i;
+    if (ptr -> qtd == ptr -> cap){
+        redimensionar_vetor_paciente(ptr);
+    }
+    i = ptr -> qtd;
+    ptr -> ponteiro_pac[i].id = definir_id(ptr, PROTOCOLO_PACIENTE);
+    
+    printf("Digite o nome do paciente: ");
+    fgets(ptr -> ponteiro_pac[i].nome, TAM_MAXIMO, stdin);
+    Retirar_Enter(ptr -> ponteiro_pac[i].nome);
+
+    Limpar_Tela();
+    printf("Digite o e-mail do paciente: ");
+    fgets(ptr -> ponteiro_pac[i].email, TAM_MAXIMO, stdin);
+    Retirar_Enter(ptr -> ponteiro_pac[i].email);
+    
+    Limpar_Tela();
+    printf("Digite o telefone do paciente: ");
+    fgets(ptr -> ponteiro_pac[i].telefone, TAM_MAXIMO, stdin);
+    Retirar_Enter(ptr -> ponteiro_pac[i].telefone);
+    Limpar_Tela();
+
+    printf("Novo paciente adicionado!\n");
+    pausar_programa(2);
+    Limpar_Tela();
+
+    ptr -> qtd++;
+}
+
+int definir_id(void *ptr, int protocolo){
+    int qtd, maior_id, i;
+    maior_id = 0;
+    switch (protocolo){
+        case PROTOCOLO_MEDICO:{
+        VetMedicos *vetor_med = (VetMedicos *) ptr;
+        qtd = vetor_med -> qtd;
+        for (i = 0; i < qtd; i++){
+            if (vetor_med -> ponteiro_med[i].id > maior_id)
+            maior_id = vetor_med -> ponteiro_med[i].id;
+        }
+        break;
+    }
+        case PROTOCOLO_PACIENTE:{
+        VetPacientes *vetor_pac = (VetPacientes *) ptr;
+        qtd = vetor_pac -> qtd;
+        for (i = 0; i < qtd; i++){
+            if (vetor_pac -> ponteiro_pac[i].id > maior_id)
+            maior_id = vetor_pac -> ponteiro_pac[i].id;
+        }
+        break;
+        }
+    }
+    return maior_id + 1;
 }

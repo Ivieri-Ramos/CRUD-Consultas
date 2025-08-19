@@ -6,8 +6,9 @@ int main(){
     VetMedicos vetor_medicos = {NULL, 0, 0};
     VetPacientes vetor_pacientes = {NULL, 0, 0};
     VetConsultas vetor_consultas = {NULL, 0, 0};
-    inicializar_medico(&vetor_medicos);
-    
+    redimensionar_vetor_medico(&vetor_medicos);
+    redimensionar_vetor_paciente(&vetor_pacientes);
+
     while(1){
         imprimir_opcoes();
         while(1){
@@ -15,15 +16,18 @@ int main(){
                 break;
         }
         switch (op){
-            case 1: //adicionar paciente/medico
+            case 1:{ //adicionar paciente/medico
             Limpar_Tela();
             printf("Digite 0 para adicionar um medico ou 1 para adicionar um paciente: ");
             buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
             if (op == PROTOCOLO_MEDICO){
                 adicionar_medico(&vetor_medicos);
             }
-            
+                else 
+                adicionar_paciente(&vetor_pacientes);
             break;
+            }
+            
             case 2: //remover medico/paciente
             case 3: //listar todos os medicos/pacientes
             case 4: //buscar paciente/medico especifico
@@ -33,6 +37,9 @@ int main(){
             case 8: //mudar status de uma consulta 
             case 9: //finalizar o programa
             printf("Obrigado por usar meu sistema, espero que tenha gostado, tenha um otimo dia, desligando...\n");
+            free(vetor_medicos.ponteiro_med);
+            free(vetor_pacientes.ponteiro_pac);
+            free(vetor_consultas.ponteiro_con);
             return 1;
         }
     }
