@@ -19,8 +19,10 @@ int main(){
             Limpar_Tela();
             printf("Digite 0 para adicionar um medico ou 1 para adicionar um paciente: ");
             buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-            if (op == PROTOCOLO_MEDICO)
-
+            if (op == PROTOCOLO_MEDICO){
+                adicionar_medico(&vetor_medicos);
+            }
+            
             break;
             case 2: //remover medico/paciente
             case 3: //listar todos os medicos/pacientes

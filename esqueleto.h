@@ -7,12 +7,24 @@
 #define MAXIMO_OP 9
 #define PROTOCOLO_MEDICO 0
 #define PROTOCOLO_PACIENTE 1
+#define MANHA_MIN 8
+#define MANHA_MAX 12
+#define TARDE_MIN 14
+#define TARDE_MAX 18
+#define MINUTOS_MIN 0
+#define MINUTOS_MAX 59
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h> //esse vou ver se vou usar
+
+#ifdef _WIN32
+#include <windows.h> //usar sleep
+    #else
+    #include <unistd.h> //usar sleep
+#endif
 
 typedef struct {
 int dia;
@@ -21,9 +33,9 @@ int ano;
 } Data; //DD/MM/AAAA
 
 typedef struct {
-int inicio;
-int fim;
-} Horario; //ex 08:00, 9:30
+int hora;
+int minuto;
+} Horario; //ex 08:00, 14:00
 
 typedef enum {
 ESPEC_CLINICO, 
@@ -102,4 +114,13 @@ void imprimir_opcoes();
 void Limpar_Tela();
 void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maior);
 void inicializar_medico(VetMedicos *ptr);
+void inicializar_paciente(VetPacientes *ptr);
+void inicializar_consulta(VetConsultas *ptr);
+void adicionar_medico(VetMedicos *ptr);
+void Retirar_Enter(char nome[TAM_MAXIMO]);
+void definir_especialidade(VetMedicos *ptr);
+void adicionar_manha(Horario *ptr);
+void adicionar_tarde(Horario *ptr);
+void pausar_programa(int segundos);
+
 #endif
