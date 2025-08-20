@@ -123,5 +123,6 @@ void definir_horario(Horario *ptr, int limite_menor, int limite_maior);
 void pausar_programa(int segundos);
 int definir_id(void *ptr, int protocolo);
 void adicionar_paciente(VetPacientes *ptr);
+void remover_pac_med(void *ptr, int protocolo);
 
 #endif

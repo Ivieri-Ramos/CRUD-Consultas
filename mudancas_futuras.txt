@@ -18,4 +18,5 @@ while (medico_atual->Fim_Manha.hora < medico_atual->Inicio_Manha.hora ||
 
 Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as três funções de redimensionamento (redimensionar_vetor_medico, _paciente, _consulta), que são quase idênticas. Isso reduzirá a repetição de código.
 
-
+//
+retirar o parametro buffer na funcao(to com preguica de fazer isso)

@@ -27,9 +27,19 @@ int main(){
                 adicionar_paciente(&vetor_pacientes);
             break;
             }
-            
-            case 2: //remover medico/paciente
+
+            case 2:{ //remover medico/paciente
+            Limpar_Tela();
+            printf("Digite 0 para remover um medico ou 1 para remover um paciente: ");
+            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            if (op == PROTOCOLO_MEDICO){
+                remover_pac_med(&vetor_medicos, PROTOCOLO_MEDICO);
+            }
+                else 
+                remover_pac_med(&vetor_pacientes, PROTOCOLO_PACIENTE);
+            }
             case 3: //listar todos os medicos/pacientes
+            
             case 4: //buscar paciente/medico especifico
             case 5: //mudar os dados de um medico/paciente
             case 6: //marcar consulta

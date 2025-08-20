@@ -242,3 +242,65 @@ int definir_id(void *ptr, int protocolo){
     }
     return maior_id + 1;
 }
+void remover_pac_med(void *ptr, int protocolo){
+    int i, num, id_encontrado;
+    char buffer[TAMANHO_BUFFER];
+    long id;
+    id_encontrado = -1;
+    switch (protocolo){
+    case PROTOCOLO_MEDICO:{
+        VetMedicos *vetor_med = (VetMedicos *) ptr;
+        printf("Digite o id do medico que sera removido: ");
+        num = definir_id(vetor_med, PROTOCOLO_MEDICO) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
+        buffer_completo(buffer, &id, 1, num); //1 e o menor id possivel
+        for (i = 0; i < vetor_med -> qtd; i++){
+            if (vetor_med -> ponteiro_med[i].id == id){
+                id_encontrado = (int) id;
+                break;
+            }
+        }
+        if (id_encontrado != -1){
+            for (; i < vetor_med -> qtd - 1; i++){ // -1 pois se nao ele acessa memoria invalida
+                vetor_med -> ponteiro_med[i] = vetor_med -> ponteiro_med[i + 1];
+            }
+            printf("Medico removido com sucesso!\n");
+                pausar_programa(2);
+                Limpar_Tela();
+                vetor_med -> qtd--;
+        }   
+            else {
+                printf("Medico nao encontrado, por favor, insira um id valido na proxima\n");
+                pausar_programa(2);
+                Limpar_Tela();
+            }
+            break;
+        }
+    case PROTOCOLO_PACIENTE:{
+        VetPacientes *vetor_pac = (VetPacientes *) ptr;
+        printf("Digite o id do paciente que sera removido: ");
+        num = definir_id(vetor_pac, PROTOCOLO_PACIENTE) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
+        buffer_completo(buffer, &id, 1, num); //1 e o menor id possivel
+        for (i = 0; i < vetor_pac -> qtd; i++){
+            if (vetor_pac -> ponteiro_pac[i].id == id){
+                id_encontrado = (int) id;
+                break;
+            }
+        }
+        if (id_encontrado != -1){
+            for (; i < vetor_pac -> qtd - 1; i++){ // -1 pois se nao ele acessa memoria invalida
+                vetor_pac -> ponteiro_pac[i] = vetor_pac -> ponteiro_pac[i + 1];
+            }
+            printf("Paciente removido com sucesso!\n");
+                pausar_programa(2);
+                Limpar_Tela();
+                vetor_pac -> qtd--;
+        }   
+            else {
+                printf("Paciente nao encontrado, por favor, insira um id valido na proxima\n");
+                pausar_programa(2);
+                Limpar_Tela();
+            }
+        break;
+    }
+    }
+}
