@@ -1,28 +1,48 @@
-// Em adicionar_medico, depois de ler os 4 horários
-
-// Validação Lógica da Manhã
-while (medico_atual->Fim_Manha.hora < medico_atual->Inicio_Manha.hora || 
-      (medico_atual->Fim_Manha.hora == medico_atual->Inicio_Manha.hora && 
-       medico_atual->Fim_Manha.minuto <= medico_atual->Inicio_Manha.minuto)) {
-    
-    printf("\nErro: O horario final da manha deve ser apos o horario inicial.\n");
-    printf("Por favor, insira os horarios da manha novamente.\n\n");
-    
-    printf("---Escolha inicio da manha---\n");
-    definir_horario(&medico_atual->Inicio_Manha, MANHA_MIN, MANHA_MAX);
-    printf("---Escolha fim da manha---\n");
-    definir_horario(&medico_atual->Fim_Manha, MANHA_MIN, MANHA_MAX);
+/**
+ * @brief Exibe um sub-menu para o usuário escolher entre Médico ou Paciente.
+ * @param acao Uma string descrevendo a ação (ex: "remover", "listar").
+ * @return O protocolo escolhido (PROTOCOLO_MEDICO ou PROTOCOLO_PACIENTE).
+ */
+int obter_protocolo(const char *acao) {
+    int protocolo;
+    Limpar_Tela();
+    printf("Voce deseja %s um medico ou um paciente?\n", acao);
+    printf("Digite 0 para Medico ou 1 para Paciente: ");
+    buffer_completo(&protocolo, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+    return protocolo;
 }
-
-// Fazer a mesma lógica de validação para o período da tarde...
+//
 
 Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as três funções de
  redimensionamento (redimensionar_vetor_medico, _paciente, _consulta), que são quase idênticas.
 Isso reduzirá a repetição de código.
 
 //
-retirar o parametro buffer na funcao(to com preguica de fazer isso) e fazer o cast de long para int (fiz)
-\\
-criar uma funcao para imprimir medicos e paciente sem fazer repetido na funcao (fiz)
-listar_todos e listar_especifico 
-//
+
+buscar indice por id
+/**
+ * @brief Busca por um ID em um vetor genérico e retorna o índice.
+ * @param ptr Ponteiro para o vetor (VetMedicos* ou VetPacientes*).
+ * @param protocolo O tipo de entidade a ser buscada.
+ * @param id_procurado O ID a ser encontrado.
+ * @return O índice do elemento se encontrado, ou -1 se não encontrado.
+ */
+int buscar_indice_por_id(void *ptr, int protocolo, int id_procurado) {
+    if (protocolo == PROTOCOLO_MEDICO) {
+        VetMedicos *vetor_med = (VetMedicos *)ptr;
+        for (int i = 0; i < vetor_med->qtd; i++) {
+            if (vetor_med->ponteiro_med[i].id == id_procurado) {
+                return i; // Retorna o índice encontrado
+            }
+        }
+    } else if (protocolo == PROTOCOLO_PACIENTE) {
+        VetPacientes *vetor_pac = (VetPacientes *)ptr;
+        for (int i = 0; i < vetor_pac->qtd; i++) {
+            if (vetor_pac->ponteiro_pac[i].id == id_procurado) {
+                return i; // Retorna o índice encontrado
+            }
+        }
+    }
+    return -1; // Retorna -1 se não encontrou
+}
+dps eu faco essa bosta

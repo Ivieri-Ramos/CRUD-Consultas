@@ -133,12 +133,36 @@ void adicionar_medico(VetMedicos *ptr){
     printf("---Escolha fim da manha---\n");
     definir_horario(&ptr -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
     
+    while (ptr -> ponteiro_med[i].Fim_Manha.hora < ptr -> ponteiro_med[i].Inicio_Manha.hora || 
+        (ptr -> ponteiro_med[i].Fim_Manha.hora == ptr -> ponteiro_med[i].Inicio_Manha.hora && 
+        ptr -> ponteiro_med[i].Fim_Manha.minuto <= ptr -> ponteiro_med[i].Inicio_Manha.minuto)) {
+        printf("\nErro: O horario final da manha deve ser apos o horario inicial.\n");
+        printf("Por favor, insira os horarios da manha novamente.\n\n");
+        
+        printf("---Escolha inicio da manha---\n");
+        definir_horario(&ptr -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
+        printf("---Escolha fim da manha---\n");
+        definir_horario(&ptr -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
+    }
+
     printf("Hora de definir o horario da tarde, defina entra 14:00(inicio) e 18:59(fim)\n\n");
     printf("---Escolha inicio da tarde---\n");
     definir_horario(&ptr -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
     printf("---Escolha fim da tarde---\n");
     definir_horario(&ptr -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
-
+    
+    while (ptr -> ponteiro_med[i].Fim_Tarde.hora < ptr -> ponteiro_med[i].Inicio_Tarde.hora || 
+        (ptr -> ponteiro_med[i].Fim_Tarde.hora == ptr -> ponteiro_med[i].Inicio_Tarde.hora && 
+        ptr -> ponteiro_med[i].Fim_Tarde.minuto <= ptr -> ponteiro_med[i].Inicio_Tarde.minuto)) {
+        printf("\nErro: O horario final da tarde deve ser apos o horario inicial.\n");
+        printf("Por favor, insira os horarios da tarde novamente.\n\n");
+        
+        printf("---Escolha inicio da tarde---\n");
+        definir_horario(&ptr -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
+        printf("---Escolha fim da tarde---\n");
+        definir_horario(&ptr -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
+    
+    }
     ptr -> qtd++;
     printf("Novo medico adicionado!\n");
     pausar_programa(2);
