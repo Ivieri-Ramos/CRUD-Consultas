@@ -16,7 +16,13 @@ while (medico_atual->Fim_Manha.hora < medico_atual->Inicio_Manha.hora ||
 
 // Fazer a mesma lógica de validação para o período da tarde...
 
-Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as três funções de redimensionamento (redimensionar_vetor_medico, _paciente, _consulta), que são quase idênticas. Isso reduzirá a repetição de código.
+Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as três funções de
+ redimensionamento (redimensionar_vetor_medico, _paciente, _consulta), que são quase idênticas.
+Isso reduzirá a repetição de código.
 
 //
-retirar o parametro buffer na funcao(to com preguica de fazer isso)
+retirar o parametro buffer na funcao(to com preguica de fazer isso) e fazer o cast de long para int
+\\
+criar uma funcao para imprimir medicos e paciente sem fazer repetido na funcao
+listar_todos e listar_especifico
+//

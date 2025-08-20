@@ -50,13 +50,26 @@ int main(){
                 }
             break;
             }
-            case 4: //buscar paciente/medico especifico
+            case 4:{ //buscar paciente/medico especifico
+            Limpar_Tela();
+            printf("Digite 0 para listar um medico especifico ou 1 para listar um paciente especifico: ");
+            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            if (op == PROTOCOLO_MEDICO){
+                listar_especifico(&vetor_medicos, PROTOCOLO_MEDICO);
+            }
+                else{ 
+                    listar_especifico(&vetor_pacientes, PROTOCOLO_PACIENTE);
+                }
+            }
+            break;    
             case 5: //mudar os dados de um medico/paciente
             case 6: //marcar consulta
             case 7: //ver consultas marcadas
             case 8: //mudar status de uma consulta 
             case 9: //finalizar o programa
+            Limpar_Tela();
             printf("Obrigado por usar meu sistema, espero que tenha gostado, tenha um otimo dia, desligando...\n");
+            pausar_programa(2);
             free(vetor_medicos.ponteiro_med);
             free(vetor_pacientes.ponteiro_pac);
             free(vetor_consultas.ponteiro_con);

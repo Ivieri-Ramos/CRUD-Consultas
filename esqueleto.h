@@ -126,5 +126,6 @@ void adicionar_paciente(VetPacientes *ptr);
 void remover_pac_med(void *ptr, int protocolo);
 void pausar_e_limpar_buffer();
 void listar_todos(void *ptr, int protocolo);
+void listar_especifico(void *ptr, int protocolo);
 
 #endif
