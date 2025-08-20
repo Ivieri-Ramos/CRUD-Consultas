@@ -1,8 +1,7 @@
 #include "esqueleto.h"
 
 int main(){
-    long op;
-    char buffer[TAMANHO_BUFFER];
+    int op;
     VetMedicos vetor_medicos = {NULL, 0, 0};
     VetPacientes vetor_pacientes = {NULL, 0, 0};
     VetConsultas vetor_consultas = {NULL, 0, 0};
@@ -11,12 +10,12 @@ int main(){
 
     while(1){
         imprimir_opcoes();
-        buffer_completo(buffer, &op, MINIMO_OP, MAXIMO_OP);
+        buffer_completo(&op, MINIMO_OP, MAXIMO_OP);
         switch (op){
             case 1:{ //adicionar paciente/medico
             Limpar_Tela();
             printf("Digite 0 para adicionar um medico ou 1 para adicionar um paciente: ");
-            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
             if (op == PROTOCOLO_MEDICO){
                 adicionar_medico(&vetor_medicos);
             }
@@ -29,7 +28,7 @@ int main(){
             case 2:{ //remover medico/paciente
             Limpar_Tela();
             printf("Digite 0 para remover um medico ou 1 para remover um paciente: ");
-            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
             if (op == PROTOCOLO_MEDICO){
                 remover_pac_med(&vetor_medicos, PROTOCOLO_MEDICO);
             }
@@ -41,7 +40,7 @@ int main(){
             case 3:{ //listar todos os medicos/pacientes
             Limpar_Tela();
             printf("Digite 0 para listar todos os medicos ou 1 para listar todos os pacientes: ");
-            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
             if (op == PROTOCOLO_MEDICO){
                 listar_todos(&vetor_medicos, PROTOCOLO_MEDICO);
             }
@@ -53,15 +52,15 @@ int main(){
             case 4:{ //buscar paciente/medico especifico
             Limpar_Tela();
             printf("Digite 0 para listar um medico especifico ou 1 para listar um paciente especifico: ");
-            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
             if (op == PROTOCOLO_MEDICO){
                 listar_especifico(&vetor_medicos, PROTOCOLO_MEDICO);
             }
                 else{ 
                     listar_especifico(&vetor_pacientes, PROTOCOLO_PACIENTE);
                 }
-            }
-            break;    
+            break;
+            }    
             case 5: //mudar os dados de um medico/paciente
             case 6: //marcar consulta
             case 7: //ver consultas marcadas

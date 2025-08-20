@@ -21,8 +21,8 @@ Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as tr
 Isso reduzirá a repetição de código.
 
 //
-retirar o parametro buffer na funcao(to com preguica de fazer isso) e fazer o cast de long para int
+retirar o parametro buffer na funcao(to com preguica de fazer isso) e fazer o cast de long para int (fiz)
 \\
-criar uma funcao para imprimir medicos e paciente sem fazer repetido na funcao
-listar_todos e listar_especifico
+criar uma funcao para imprimir medicos e paciente sem fazer repetido na funcao (fiz)
+listar_todos e listar_especifico 
 //

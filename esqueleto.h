@@ -109,10 +109,10 @@ int prioridadeUrgentePrimeiro;// 1: sempre tentar marcar urgente no 1o slot livr
 
 //funcoes aqui embaixo ----------
 void ler_buffer(char buffer[]);
-int verificartoken(char *token, long *numero, int limite_menor, int limite_maior);
+int verificartoken(char *token, int *numero, int limite_menor, int limite_maior);
 void imprimir_opcoes();
 void Limpar_Tela();
-void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maior);
+void buffer_completo(int *num, int limite_menor, int limite_maior);
 void redimensionar_vetor_medico(VetMedicos *ptr);
 void redimensionar_vetor_paciente(VetPacientes *ptr);
 void redimensionar_vetor_consulta(VetConsultas *ptr);
@@ -127,5 +127,7 @@ void remover_pac_med(void *ptr, int protocolo);
 void pausar_e_limpar_buffer();
 void listar_todos(void *ptr, int protocolo);
 void listar_especifico(void *ptr, int protocolo);
+void imprimir_medico(Medico dado);
+void imprimir_paciente(Paciente dado);
 
 #endif

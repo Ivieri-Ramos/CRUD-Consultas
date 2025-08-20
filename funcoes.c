@@ -9,9 +9,11 @@ void ler_buffer(char buffer[]){
     }
 }
 
-int verificartoken(char *token, long *numero, int limite_menor, int limite_maior){
+int verificartoken(char *token, int *valor, int limite_menor, int limite_maior){
     char *endptr;
-    *numero = strtol(token, &endptr, 10);
+    long numero;
+
+    numero = strtol(token, &endptr, 10);
     if (endptr == token){
         return 0;
     }
@@ -21,9 +23,10 @@ int verificartoken(char *token, long *numero, int limite_menor, int limite_maior
     if (*endptr != '\0'){
         return 0;
     }
-    if (*numero < limite_menor || *numero > limite_maior){
+    if (numero < limite_menor || numero > limite_maior){
         return 0;
     }
+    *valor = (int) numero; 
     return 1;
 }
 void imprimir_opcoes(){
@@ -38,6 +41,7 @@ void imprimir_opcoes(){
     printf("Digite 9 para finalizar o programa;\n");
     printf("Digite aqui: ");
 }
+
 void Limpar_Tela(){
     #ifdef _WIN32
     system("cls");
@@ -45,8 +49,10 @@ void Limpar_Tela(){
         system("clear");
     #endif
 }
-void buffer_completo(char buffer[], long *num, int limite_menor, int limite_maior){
+
+void buffer_completo(int *num, int limite_menor, int limite_maior){
     char *token;
+    char buffer[TAMANHO_BUFFER];
     while(1){
         ler_buffer(buffer);
         token = strtok(buffer, "\n");
@@ -107,6 +113,7 @@ void redimensionar_vetor_consulta(VetConsultas *ptr){
 }
 void adicionar_medico(VetMedicos *ptr){
     int i;
+    Limpar_Tela();
     if (ptr -> cap == ptr -> qtd){
         redimensionar_vetor_medico(ptr);
     }
@@ -143,8 +150,7 @@ void Retirar_Enter(char nome[TAM_MAXIMO]){
 }
 
 void definir_especialidade(Medico *ptr){
-    char buffer[TAMANHO_BUFFER];
-    long valor;
+    int valor;
     printf("---Defina a especialidade do medico---\n");
     printf("Digite 0 para ESPEC_CLINICO;\n");
     printf("Digite 1 para ESPEC_PEDIATRA;\n");
@@ -152,7 +158,7 @@ void definir_especialidade(Medico *ptr){
     printf("Digite 3 para ESPEC_CARDIO;\n");
     printf("Digite 4 para ESPEC_OUTRA;\n");
     printf("Digite aqui: ");
-    buffer_completo(buffer, &valor, ESPEC_CLINICO, ESPEC_OUTRA);
+    buffer_completo(&valor, ESPEC_CLINICO, ESPEC_OUTRA);
     ptr -> especialidade = (int) valor;
     Limpar_Tela();
 }
@@ -189,6 +195,7 @@ void pausar_programa(int segundos) {
 
 void adicionar_paciente(VetPacientes *ptr){
     int i;
+    Limpar_Tela();
     if (ptr -> qtd == ptr -> cap){
         redimensionar_vetor_paciente(ptr);
     }
@@ -243,9 +250,7 @@ int definir_id(void *ptr, int protocolo){
     return maior_id + 1;
 }
 void remover_pac_med(void *ptr, int protocolo){
-    int i, num, id_encontrado;
-    char buffer[TAMANHO_BUFFER];
-    long id;
+    int i, num, id_encontrado, id;
     id_encontrado = -1;
     switch (protocolo){
         case PROTOCOLO_MEDICO:{
@@ -257,7 +262,7 @@ void remover_pac_med(void *ptr, int protocolo){
             }
             printf("Digite o id do medico que sera removido: ");
             num = definir_id(vetor_med, PROTOCOLO_MEDICO) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
-            buffer_completo(buffer, &id, 1, num); //1 e o menor id possivel
+            buffer_completo(&id, 1, num); //1 e o menor id possivel
             for (i = 0; i < vetor_med -> qtd; i++){
                 if (vetor_med -> ponteiro_med[i].id == id){
                     id_encontrado = (int) id;
@@ -289,7 +294,7 @@ void remover_pac_med(void *ptr, int protocolo){
             }
             printf("Digite o id do paciente que sera removido: ");
             num = definir_id(vetor_pac, PROTOCOLO_PACIENTE) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
-            buffer_completo(buffer, &id, 1, num); // 1 e o menor id possivel
+            buffer_completo(&id, 1, num); // 1 e o menor id possivel
             for (i = 0; i < vetor_pac -> qtd; i++){
                 if (vetor_pac -> ponteiro_pac[i].id == id){
                     id_encontrado = (int) id;
@@ -328,29 +333,9 @@ void listar_todos(void *ptr, int protocolo){
                 Limpar_Tela();
                 return;
             }
-            printf("---Todos os medicos cadastrados---\n\n");
+            printf("-----Todos os medicos cadastrados-----\n\n");
             for (i = 0; i < vetor_med -> qtd; i++){
-                especialidade = vetor_med -> ponteiro_med[i].especialidade;
-                printf("Nome do medico: %s\n", vetor_med -> ponteiro_med[i].nome);
-                printf("Id do medico: %d\n", vetor_med -> ponteiro_med[i].id);
-                switch (especialidade){
-                    case ESPEC_CLINICO: printf("Especialidade do medico : Especialista clinico\n"); break;
-                    case ESPEC_PEDIATRA: printf("Especialidade do medico : Especialista pediatra\n"); break;
-                    case ESPEC_DERMATO: printf("Especialidade do medico : Especialista dermatologista\n"); break;
-                    case ESPEC_CARDIO: printf("Especialidade do medico : Especialista cardiologista\n"); break;
-                    case ESPEC_OUTRA: printf("Especialidade do medico : Especialista 'outra'\n"); break;
-                }
-                printf("Turno da manha: %02d:%02d ate %02d:%02d\n", 
-                vetor_med -> ponteiro_med[i].Inicio_Manha.hora,
-                vetor_med -> ponteiro_med[i].Inicio_Manha.minuto,
-                vetor_med ->ponteiro_med[i].Fim_Manha.hora,
-                vetor_med ->ponteiro_med[i].Fim_Manha.minuto);
-                printf("Turno da tarde: %02d:%02d ate %02d:%02d\n", 
-                vetor_med -> ponteiro_med[i].Inicio_Tarde.hora,
-                vetor_med -> ponteiro_med[i].Inicio_Tarde.minuto,
-                vetor_med ->ponteiro_med[i].Fim_Tarde.hora, 
-                vetor_med ->ponteiro_med[i].Fim_Tarde.minuto);
-                printf("\n-----------------------\n");
+                imprimir_medico(vetor_med -> ponteiro_med[i]);
             }
             break;
         }
@@ -363,14 +348,9 @@ void listar_todos(void *ptr, int protocolo){
                 Limpar_Tela();
                 return;
             }
-            printf("---Todos os pacientes cadastrados---\n\n");
+            printf("-----Todos os pacientes cadastrados-----\n\n");
             for (i = 0; i < vetor_pac -> qtd; i++){
-                printf("Nome do paciente: %s\n", vetor_pac -> ponteiro_pac[i].nome);
-                printf("Id do paciente: %d\n", vetor_pac -> ponteiro_pac[i].id);
-                printf("E-mail do paciente: %s\n", vetor_pac -> ponteiro_pac[i].email);
-                printf("Telefone do paciente: %s\n", vetor_pac -> ponteiro_pac[i].telefone);
-            
-                printf("\n-----------------------\n");
+                imprimir_paciente(vetor_pac -> ponteiro_pac[i]);
             }
             break;
         }
@@ -389,9 +369,7 @@ void pausar_e_limpar_buffer(){
 
 void listar_especifico(void *ptr, int protocolo){
     Limpar_Tela();
-    int i, maior_id, especialidade, id_encontrado;
-    long id_procurado;
-    char buffer[TAMANHO_BUFFER];
+    int i, maior_id, especialidade, id_encontrado, id_procurado;
     id_encontrado = -1;
     switch (protocolo){
         case PROTOCOLO_MEDICO:{
@@ -403,7 +381,7 @@ void listar_especifico(void *ptr, int protocolo){
             }
             maior_id = definir_id(vetor_med, PROTOCOLO_MEDICO) - 1; //decrementar pois assim acha o maior id possivel
             printf("Digite o id do medico que voce busca: ");
-            buffer_completo(buffer, &id_procurado, 1, maior_id); //1 e o menor id possivel
+            buffer_completo(&id_procurado, 1, maior_id); //1 e o menor id possivel
             for(i = 0; i < vetor_med -> qtd; i++){
                 if (vetor_med -> ponteiro_med[i].id == id_procurado){
                     id_encontrado = i;
@@ -411,27 +389,8 @@ void listar_especifico(void *ptr, int protocolo){
                 }
             }
             if (id_encontrado != -1){
-            especialidade = vetor_med -> ponteiro_med[i].especialidade;
-                printf("Nome do medico: %s\n", vetor_med -> ponteiro_med[i].nome);
-                printf("Id do medico: %d\n", vetor_med -> ponteiro_med[i].id);
-                switch (especialidade){
-                    case ESPEC_CLINICO: printf("Especialidade do medico : Especialista clinico\n"); break;
-                    case ESPEC_PEDIATRA: printf("Especialidade do medico : Especialista pediatra\n"); break;
-                    case ESPEC_DERMATO: printf("Especialidade do medico : Especialista dermatologista\n"); break;
-                    case ESPEC_CARDIO: printf("Especialidade do medico : Especialista cardiologista\n"); break;
-                    case ESPEC_OUTRA: printf("Especialidade do medico : Especialista 'outra'\n"); break;
-                }
-                printf("Turno da manha: %02d:%02d ate %02d:%02d\n", 
-                vetor_med -> ponteiro_med[i].Inicio_Manha.hora,
-                vetor_med -> ponteiro_med[i].Inicio_Manha.minuto,
-                vetor_med ->ponteiro_med[i].Fim_Manha.hora,
-                vetor_med ->ponteiro_med[i].Fim_Manha.minuto);
-                printf("Turno da tarde: %02d:%02d ate %02d:%02d\n", 
-                vetor_med -> ponteiro_med[i].Inicio_Tarde.hora,
-                vetor_med -> ponteiro_med[i].Inicio_Tarde.minuto,
-                vetor_med ->ponteiro_med[i].Fim_Tarde.hora, 
-                vetor_med ->ponteiro_med[i].Fim_Tarde.minuto);
-                }
+                imprimir_medico(vetor_med -> ponteiro_med[i]);
+            }
                     else{
                         printf("Id nao encontrado, por favor, insira um id valido na proxima\n");
                         pausar_programa(2);
@@ -449,7 +408,7 @@ void listar_especifico(void *ptr, int protocolo){
             }
             maior_id = definir_id(vetor_pac, PROTOCOLO_PACIENTE) - 1; //decrementar pois assim acha o maior id possivel
             printf("Digite o id do paciente que voce busca: ");
-            buffer_completo(buffer, &id_procurado, 1, maior_id); //1 e o menor id possivel
+            buffer_completo(&id_procurado, 1, maior_id); //1 e o menor id possivel
             for(i = 0; i < vetor_pac -> qtd; i++){
                 if (vetor_pac -> ponteiro_pac[i].id == id_procurado){
                     id_encontrado = i;
@@ -457,11 +416,8 @@ void listar_especifico(void *ptr, int protocolo){
                 }
             }
             if (id_encontrado != -1){
-                printf("Nome do paciente: %s\n", vetor_pac -> ponteiro_pac[i].nome);
-                printf("Id do paciente: %d\n", vetor_pac -> ponteiro_pac[i].id);
-                printf("E-mail do paciente: %s\n", vetor_pac -> ponteiro_pac[i].email);
-                printf("Telefone do paciente: %s\n", vetor_pac -> ponteiro_pac[i].telefone);    
-            }
+            imprimir_paciente(vetor_pac -> ponteiro_pac[i]);
+        }
                 else{
                     printf("Id nao encontrado, por favor, insira um id valido na proxima\n");
                     pausar_programa(2);
@@ -473,4 +429,40 @@ void listar_especifico(void *ptr, int protocolo){
     }
     pausar_e_limpar_buffer();
     Limpar_Tela();
+}
+
+void imprimir_medico(Medico dado){
+    printf("Nome do medico: %s\n", dado.nome);
+    printf("Id do medico: %d\n", dado.id);
+    switch (dado.especialidade){
+        case ESPEC_CLINICO: printf("Especialidade do medico : Especialista clinico\n"); break;
+        case ESPEC_PEDIATRA: printf("Especialidade do medico : Especialista pediatra\n"); break;
+        case ESPEC_DERMATO: printf("Especialidade do medico : Especialista dermatologista\n"); break;
+        case ESPEC_CARDIO: printf("Especialidade do medico : Especialista cardiologista\n"); break;
+        case ESPEC_OUTRA: printf("Especialidade do medico : Especialista 'outra'\n"); break;
+    }
+    printf("Turno da manha: %02d:%02d ate %02d:%02d\n", 
+    dado.Inicio_Manha.hora,
+    dado.Inicio_Manha.minuto,
+    dado.Fim_Manha.hora,
+    dado.Fim_Manha.minuto);
+    printf("Turno da tarde: %02d:%02d ate %02d:%02d\n", 
+    dado.Inicio_Tarde.hora,
+    dado.Inicio_Tarde.minuto,
+    dado.Fim_Tarde.hora, 
+    dado.Fim_Tarde.minuto);
+    printf("\n--------------------\n\n");
+}
+
+void imprimir_paciente(Paciente dado){
+    printf("Nome do paciente: %s\n", dado.nome);
+    printf("Id do paciente: %d\n", dado.id);
+    printf("E-mail do paciente: %s\n", dado.email);
+    printf("Telefone do paciente: %s\n", dado.telefone);
+    printf("\n--------------------\n\n");    
+}
+
+void mudar_med_pac(void *ptr, int protocolo){
+    int i;
+
 }
