@@ -119,14 +119,14 @@ void adicionar_medico(VetMedicos *ptr){
     Limpar_Tela();
     definir_especialidade(&ptr -> ponteiro_med[i]);
     
-    printf("Hora de definir o horario, defina entra 08:00(inicio) e 12:59(fim)\n\n");
+    printf("Hora de definir o horario da manha, defina entra 08:00(inicio) e 12:59(fim)\n\n");
     
     printf("---Escolha inicio da manha---\n");
     definir_horario(&ptr -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
     printf("---Escolha fim da manha---\n");
     definir_horario(&ptr -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
     
-    printf("Hora de definir o horario, defina entra 14:00(inicio) e 18:59(fim)\n\n");
+    printf("Hora de definir o horario da tarde, defina entra 14:00(inicio) e 18:59(fim)\n\n");
     printf("---Escolha inicio da tarde---\n");
     definir_horario(&ptr -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
     printf("---Escolha fim da tarde---\n");
@@ -304,3 +304,76 @@ void remover_pac_med(void *ptr, int protocolo){
     }
     }
 }
+
+void listar_todos(void *ptr, int protocolo){
+    int i;
+    switch (protocolo){
+        case PROTOCOLO_MEDICO:{
+            Limpar_Tela();
+            int especialidade;
+            VetMedicos *vetor_med = (VetMedicos *) ptr;
+            if (vetor_med -> qtd == 0){
+                printf("Nao ha nenhum medico cadastrado, voltando para o menu...\n");
+                pausar_programa(2);
+                Limpar_Tela();
+                return;
+            }
+            printf("---Todos os medicos cadastrados---\n\n");
+            for (i = 0; i < vetor_med -> qtd; i++){
+                especialidade = vetor_med -> ponteiro_med[i].especialidade;
+                printf("Nome do medico: %s\n", vetor_med -> ponteiro_med[i].nome);
+                printf("Id do medico: %d\n", vetor_med -> ponteiro_med[i].id);
+                switch (especialidade){
+                    case ESPEC_CLINICO: printf("Especialidade do medico : Especialista clinico\n"); break;
+                    case ESPEC_PEDIATRA: printf("Especialidade do medico : Especialista pediatra\n"); break;
+                    case ESPEC_DERMATO: printf("Especialidade do medico : Especialista dermatologista\n"); break;
+                    case ESPEC_CARDIO: printf("Especialidade do medico : Especialista cardiologista\n"); break;
+                    case ESPEC_OUTRA: printf("Especialidade do medico : Especialista 'outra'\n"); break;
+                }
+                printf("Turno da manha: %02d:%02d ate %02d:%02d\n", 
+                vetor_med -> ponteiro_med[i].Inicio_Manha.hora,
+                vetor_med -> ponteiro_med[i].Inicio_Manha.minuto,
+                vetor_med ->ponteiro_med[i].Fim_Manha.hora,
+                vetor_med ->ponteiro_med[i].Fim_Manha.minuto);
+                printf("Turno da tarde: %02d:%02d ate %02d:%02d\n", 
+                vetor_med -> ponteiro_med[i].Inicio_Tarde.hora,
+                vetor_med -> ponteiro_med[i].Inicio_Tarde.minuto,
+                vetor_med ->ponteiro_med[i].Fim_Tarde.hora, 
+                vetor_med ->ponteiro_med[i].Fim_Tarde.minuto);
+                printf("\n-----------------------\n");
+            }
+            break;
+        }
+        case PROTOCOLO_PACIENTE:{
+            Limpar_Tela();
+            VetPacientes *vetor_pac = (VetPacientes *) ptr;
+            if (vetor_pac -> qtd == 0){
+                printf("Nao ha nenhum paciente cadastrado, voltando para o menu...\n");
+                pausar_programa(2);
+                Limpar_Tela();
+                return;
+            }
+            printf("---Todos os pacientes cadastrados---\n\n");
+            for (i = 0; i < vetor_pac -> qtd; i++){
+                printf("Nome do paciente: %s\n", vetor_pac -> ponteiro_pac[i].nome);
+                printf("Id do paciente: %d\n", vetor_pac -> ponteiro_pac[i].id);
+                printf("E-mail do paciente: %s\n", vetor_pac -> ponteiro_pac[i].email);
+                printf("Telefone do paciente: %s\n", vetor_pac -> ponteiro_pac[i].telefone);
+            
+                printf("\n-----------------------\n");
+            }
+            break;
+        }
+    }
+    pausar_e_limpar_buffer();        
+    printf("\nVoltando para o menu...\n");
+    pausar_programa(2);
+    Limpar_Tela();
+}
+
+void pausar_e_limpar_buffer(){
+    printf("\nPressione Enter para continuar...");
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+c

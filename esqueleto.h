@@ -124,5 +124,7 @@ void pausar_programa(int segundos);
 int definir_id(void *ptr, int protocolo);
 void adicionar_paciente(VetPacientes *ptr);
 void remover_pac_med(void *ptr, int protocolo);
+void pausar_e_limpar_buffer();
+void listar_todos(void *ptr, int protocolo);
 
 #endif

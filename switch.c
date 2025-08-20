@@ -11,10 +11,7 @@ int main(){
 
     while(1){
         imprimir_opcoes();
-        while(1){
-                buffer_completo(buffer, &op, MINIMO_OP, MAXIMO_OP);
-                break;
-        }
+        buffer_completo(buffer, &op, MINIMO_OP, MAXIMO_OP);
         switch (op){
             case 1:{ //adicionar paciente/medico
             Limpar_Tela();
@@ -23,8 +20,9 @@ int main(){
             if (op == PROTOCOLO_MEDICO){
                 adicionar_medico(&vetor_medicos);
             }
-                else 
+                else{ 
                 adicionar_paciente(&vetor_pacientes);
+                }
             break;
             }
 
@@ -35,11 +33,23 @@ int main(){
             if (op == PROTOCOLO_MEDICO){
                 remover_pac_med(&vetor_medicos, PROTOCOLO_MEDICO);
             }
-                else 
+                else{ 
                 remover_pac_med(&vetor_pacientes, PROTOCOLO_PACIENTE);
+                }
+            break;
             }
-            case 3: //listar todos os medicos/pacientes
-            
+            case 3:{ //listar todos os medicos/pacientes
+            Limpar_Tela();
+            printf("Digite 0 para listar todos os medicos ou 1 para listar todos os pacientes: ");
+            buffer_completo(buffer, &op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
+            if (op == PROTOCOLO_MEDICO){
+                listar_todos(&vetor_medicos, PROTOCOLO_MEDICO);
+            }
+                else{ 
+                    listar_todos(&vetor_pacientes, PROTOCOLO_PACIENTE);
+                }
+            break;
+            }
             case 4: //buscar paciente/medico especifico
             case 5: //mudar os dados de um medico/paciente
             case 6: //marcar consulta
