@@ -60,7 +60,7 @@ void adicionar_medico(VetMedicos *ptr){
 
 void definir_especialidade(Medico *ptr){
     int valor;
-    printf("---Defina a especialidade do medico---\n");
+    printf("---Defina a especialidade do medico---\n\n");
     printf("Digite 0 para ESPEC_CLINICO;\n");
     printf("Digite 1 para ESPEC_PEDIATRA;\n");
     printf("Digite 2 para ESPEC_DERMATO;\n");
@@ -75,9 +75,7 @@ void definir_especialidade(Medico *ptr){
 void definir_horario(Horario *ptr, int limite_menor, int limite_maior){
     char buffer[TAMANHO_BUFFER];
     int qtd_lidos;
-    printf("Digite no formato HH:MM(ex - 13:30)\n");
     while(1){
-        printf("Digite aqui: ");
         ler_buffer(buffer);
         qtd_lidos = sscanf(buffer, "%d:%d", &ptr -> hora, &ptr -> minuto);
 
@@ -115,6 +113,7 @@ void remover_medico(VetMedicos *vetor_med){
         for (; i < vetor_med -> qtd - 1; i++){ // -1 pois se nao ele acessa memoria invalida
             vetor_med -> ponteiro_med[i] = vetor_med -> ponteiro_med[i + 1];
         }
+        Limpar_Tela();
         printf("Medico removido com sucesso!\n");
             pausar_programa(2);
             Limpar_Tela();
@@ -163,6 +162,7 @@ void listar_medico_especifico(VetMedicos *vetor_med){
             break;
         }
     }
+    Limpar_Tela();
     if (id_encontrado != -1){
         imprimir_medico(vetor_med -> ponteiro_med[i]);
     }
@@ -180,11 +180,11 @@ void imprimir_medico(Medico dado){
     printf("Nome do medico: %s\n", dado.nome);
     printf("Id do medico: %d\n", dado.id);
     switch (dado.especialidade){
-        case ESPEC_CLINICO: printf("Especialidade do medico : Especialista clinico\n"); break;
-        case ESPEC_PEDIATRA: printf("Especialidade do medico : Especialista pediatra\n"); break;
-        case ESPEC_DERMATO: printf("Especialidade do medico : Especialista dermatologista\n"); break;
-        case ESPEC_CARDIO: printf("Especialidade do medico : Especialista cardiologista\n"); break;
-        case ESPEC_OUTRA: printf("Especialidade do medico : Especialista 'outra'\n"); break;
+        case ESPEC_CLINICO: printf("Especialidade do medico: Especialista clinico\n"); break;
+        case ESPEC_PEDIATRA: printf("Especialidade do medico: Especialista pediatra\n"); break;
+        case ESPEC_DERMATO: printf("Especialidade do medico: Especialista dermatologista\n"); break;
+        case ESPEC_CARDIO: printf("Especialidade do medico: Especialista cardiologista\n"); break;
+        case ESPEC_OUTRA: printf("Especialidade do medico: Especialista 'outra'\n"); break;
     }
     printf("Turno da manha: %02d:%02d ate %02d:%02d\n", 
     dado.Inicio_Manha.hora,
@@ -197,4 +197,53 @@ void imprimir_medico(Medico dado){
     dado.Fim_Tarde.hora, 
     dado.Fim_Tarde.minuto);
     printf("\n--------------------\n\n");
+}
+
+void switch_medico(VetMedicos *vetor_med){
+    int op;
+    while(1){
+        Limpar_Tela();
+        printf("----- Menu dos medicos -----\n\n");
+        printf("Digite 1 para adicionar um medico;\n");
+        printf("Digite 2 para remover um medico;\n");
+        printf("Digite 3 para listar todos os medicos;\n");
+        printf("Digite 4 para listar um medico especifico;\n");
+        printf("Digite 5 para atualizar um medico;\n");
+        printf("Digite 6 para voltar ao menu principal;\n");
+        printf("Digite aqui: ");        
+        buffer_completo(&op, ADICIONAR, MENU);
+
+        switch (op){
+            case ADICIONAR:{
+                Limpar_Tela();
+                adicionar_medico(vetor_med);
+                break;
+            }
+            case REMOVER:{
+                Limpar_Tela();
+                remover_medico(vetor_med);
+                break;
+            }
+            case LISTAR_TODOS:{
+                Limpar_Tela();
+                listar_medicos(vetor_med);
+                break;
+            }
+            case LISTAR_ESPECIFICO:{
+                Limpar_Tela();
+                listar_medico_especifico(vetor_med);
+                break;
+            }
+            case ATUALIZAR:{
+                Limpar_Tela();
+                break;
+            }
+            case MENU:{
+                Limpar_Tela();
+                printf("Voltando para o menu...\n");
+                pausar_programa(2);
+                return;
+            }
+        }    
+    }
 }

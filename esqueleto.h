@@ -3,8 +3,6 @@
 #define TAM_MINIMO 20 //declaracao para strings
 #define TAM_MAXIMO 64 //declaracao para strings
 #define TAMANHO_BUFFER 100
-#define MINIMO_OP 1
-#define MAXIMO_OP 9
 
 //necessario apenas para horarios
 #define MANHA_MIN 8
@@ -31,6 +29,23 @@ typedef enum {
     PACIENTE,
     CONSULTA
 } Categorias;
+
+typedef enum {
+    ADICIONAR = 1,
+    REMOVER,
+    LISTAR_TODOS,
+    LISTAR_ESPECIFICO,
+    ATUALIZAR,
+    MENU
+} Acoes; //acoes para os cases do paciente e medico;
+
+typedef enum {
+    MENU_MEDICO = 1,
+    MENU_PACIENTE,
+    MENU_CONSULTA,
+    MENU_BACKUP,
+    MENU_FINALIZAR
+} Menu; //organizar o switch no main.c
 
 typedef struct {
 int dia;
@@ -134,6 +149,7 @@ void imprimir_medico(Medico dado);
 void listar_medico_especifico(VetMedicos *vetor_med);
 void listar_medicos(VetMedicos *vetor_med);
 void remover_medico(VetMedicos *vetor_med);
+void switch_medico(VetMedicos *vetor_med);
 
 //------------------------------------------------
 //funcoes de pacientes.c
@@ -142,5 +158,6 @@ void imprimir_paciente(Paciente dado);
 void remover_paciente(VetPacientes *vetor_pac);
 void listar_pacientes(VetPacientes *vetor_pac);
 void listar_paciente_especifico(VetPacientes *vetor_pac);
+void switch_paciente(VetPacientes *vetor_pac);
 
 #endif

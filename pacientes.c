@@ -120,3 +120,52 @@ void imprimir_paciente(Paciente dado){
     printf("Telefone do paciente: %s\n", dado.telefone);
     printf("\n--------------------\n\n");    
 }
+
+void switch_paciente(VetPacientes *vetor_pac){
+    int op;
+    while(1){
+        Limpar_Tela();
+        printf("----- Menu dos pacientes -----\n\n");
+        printf("Digite 1 para adicionar um paciente;\n");
+        printf("Digite 2 para remover um paciente;\n");
+        printf("Digite 3 para listar todos os pacientes;\n");
+        printf("Digite 4 para listar um paciente especifico;\n");
+        printf("Digite 5 para atualizar um paciente;\n");
+        printf("Digite 6 para voltar ao menu principal;\n");
+        printf("Digite aqui: ");        
+        buffer_completo(&op, ADICIONAR, MENU);
+
+        switch (op){
+            case ADICIONAR:{
+                Limpar_Tela();
+                adicionar_paciente(vetor_pac);
+                break;
+            }
+            case REMOVER:{
+                Limpar_Tela();
+                remover_paciente(vetor_pac);
+                break;
+            }
+            case LISTAR_TODOS:{
+                Limpar_Tela();
+                listar_pacientes(vetor_pac);
+                break;
+            }
+            case LISTAR_ESPECIFICO:{
+                Limpar_Tela();
+                listar_paciente_especifico(vetor_pac);
+                break;
+            }
+            case ATUALIZAR:{
+                Limpar_Tela();
+                break;
+            }
+            case MENU:{
+                Limpar_Tela();
+                printf("Voltando para o menu...\n");
+                pausar_programa(2);
+                return;
+            }
+        }    
+    }
+}

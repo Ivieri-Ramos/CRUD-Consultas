@@ -13,12 +13,6 @@ int obter_protocolo(const char *acao) {
 }
 //
 
-Assim como você unificou a função de gerar ID, você pode fazer o mesmo com as três funções de
- redimensionamento (redimensionar_vetor_medico, _paciente, _consulta), que são quase idênticas.
-Isso reduzirá a repetição de código.
-
-//
-
 buscar indice por id
 /**
  * @brief Busca por um ID em um vetor genérico e retorna o índice.
@@ -49,3 +43,7 @@ dps eu faco essa bosta
 
 //
 declarar as funcoes necessarias para static
+
+//
+fazer um menu interativo, separando em querer mudar medicos, pacientes e consultas, cada um
+em seu respectivo arquivo

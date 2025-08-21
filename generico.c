@@ -30,15 +30,12 @@ int verificartoken(char *token, int *valor, int limite_menor, int limite_maior){
     return 1;
 }
 void imprimir_opcoes(){
-    printf("Digite 1 para adicionar um novo paciente/medico;\n");
-    printf("Digite 2 para remover um paciente/medico existente;\n");
-    printf("Digite 3 para listar todos os pacientes/medicos;\n");
-    printf("Digite 4 para buscar algum medico/paciente especifico;\n");
-    printf("Digite 5 para mudar algum dado de um paciente/medico existente;\n");
-    printf("Digite 6 para marcar uma consulta;\n");
-    printf("Digite 7 para ver as consultas existentes;\n");
-    printf("Digite 8 para mudar o status de uma consulta;\n");
-    printf("Digite 9 para finalizar o programa;\n");
+    printf("-----------------------------------------\n\n");
+    printf("Digite 1 para ir ao menu de medicos;\n");
+    printf("Digite 2 para ir ao menu de pacientes;\n");
+    printf("Digite 3 para ir ao menu de consultas;\n");
+    printf("Digite 4 para fazer um backup do sistema;\n");
+    printf("Digite 5 para finalizar o programa;\n");
     printf("Digite aqui: ");
 }
 
