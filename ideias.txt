@@ -1,11 +1,12 @@
-1. implementar alocação dinamica de memoria
-2. implementar medicos e a especialidade de cada um
-3. implementar pacientes
-4. tempos, horario e duracao de cada consulta
+1. tempos, horario e duracao de cada consulta
+2. atualizar paciente e medico
+3. funcao generica para obter indice procurado(sla como faco isso)
+4. iniciar os bagui de consulta
 5. urgencia caso haja 
 6. receber arquivos .txt
 7. agendar cada consulta com horarios separados
+8. alocar dinamicamente os 3 vetores (preguica do diabo)
+9. fazer um menu separado entre medico, paciente e consulta, e dentro disso, eu separo cada funcionalidade
+
 .\CRUDRENE.exe
 -----------------------------------------------------------------------------------------------
-o que eu for implementado eu coloco aq embaixo
-.

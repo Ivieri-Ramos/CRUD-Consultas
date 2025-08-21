@@ -8,8 +8,11 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"${workspaceFolder}\\Funcoes.c",
-				"${workspaceFolder}\\switch.c",
+				"${workspaceFolder}\\generico.c",
+				"${workspaceFolder}\\main.c",
+				"${workspaceFolder}\\medicos.c",
+				"${workspaceFolder}\\pacientes.c",
+				"${workspaceFolder}\\consultas.c",
 				"-o",
 				"${workspaceFolder}\\CRUDRENE.exe"
 			],

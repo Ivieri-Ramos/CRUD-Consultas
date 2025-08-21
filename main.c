@@ -5,8 +5,8 @@ int main(){
     VetMedicos vetor_medicos = {NULL, 0, 0};
     VetPacientes vetor_pacientes = {NULL, 0, 0};
     VetConsultas vetor_consultas = {NULL, 0, 0};
-    redimensionar_vetor_medico(&vetor_medicos);
-    redimensionar_vetor_paciente(&vetor_pacientes);
+    redimensionar_vetores(&vetor_medicos, MEDICO);
+    redimensionar_vetores(&vetor_pacientes, PACIENTE);
 
     while(1){
         imprimir_opcoes();
@@ -15,8 +15,8 @@ int main(){
             case 1:{ //adicionar paciente/medico
             Limpar_Tela();
             printf("Digite 0 para adicionar um medico ou 1 para adicionar um paciente: ");
-            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-            if (op == PROTOCOLO_MEDICO){
+            buffer_completo(&op, MEDICO, PACIENTE);
+            if (op == MEDICO){
                 adicionar_medico(&vetor_medicos);
             }
                 else{ 
@@ -28,36 +28,36 @@ int main(){
             case 2:{ //remover medico/paciente
             Limpar_Tela();
             printf("Digite 0 para remover um medico ou 1 para remover um paciente: ");
-            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-            if (op == PROTOCOLO_MEDICO){
-                remover_pac_med(&vetor_medicos, PROTOCOLO_MEDICO);
+            buffer_completo(&op, MEDICO, PACIENTE);
+            if (op == MEDICO){
+                remover_medico(&vetor_medicos);
             }
                 else{ 
-                remover_pac_med(&vetor_pacientes, PROTOCOLO_PACIENTE);
+                remover_paciente(&vetor_pacientes);
                 }
             break;
             }
             case 3:{ //listar todos os medicos/pacientes
             Limpar_Tela();
             printf("Digite 0 para listar todos os medicos ou 1 para listar todos os pacientes: ");
-            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-            if (op == PROTOCOLO_MEDICO){
-                listar_todos(&vetor_medicos, PROTOCOLO_MEDICO);
+            buffer_completo(&op, MEDICO, PACIENTE);
+            if (op == MEDICO){
+                listar_medicos(&vetor_medicos);
             }
                 else{ 
-                    listar_todos(&vetor_pacientes, PROTOCOLO_PACIENTE);
+                    listar_pacientes(&vetor_pacientes);
                 }
             break;
             }
             case 4:{ //buscar paciente/medico especifico
             Limpar_Tela();
             printf("Digite 0 para listar um medico especifico ou 1 para listar um paciente especifico: ");
-            buffer_completo(&op, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-            if (op == PROTOCOLO_MEDICO){
-                listar_especifico(&vetor_medicos, PROTOCOLO_MEDICO);
+            buffer_completo(&op, MEDICO, PACIENTE);
+            if (op == MEDICO){
+                listar_medico_especifico(&vetor_medicos);
             }
                 else{ 
-                    listar_especifico(&vetor_pacientes, PROTOCOLO_PACIENTE);
+                    listar_paciente_especifico(&vetor_pacientes);
                 }
             break;
             }    

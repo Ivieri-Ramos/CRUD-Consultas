@@ -5,8 +5,8 @@
 #define TAMANHO_BUFFER 100
 #define MINIMO_OP 1
 #define MAXIMO_OP 9
-#define PROTOCOLO_MEDICO 0
-#define PROTOCOLO_PACIENTE 1
+
+//necessario apenas para horarios
 #define MANHA_MIN 8
 #define MANHA_MAX 12
 #define TARDE_MIN 14
@@ -25,6 +25,12 @@
     #else
     #include <unistd.h> //usar sleep
 #endif
+
+typedef enum {
+    MEDICO,
+    PACIENTE,
+    CONSULTA
+} Categorias;
 
 typedef struct {
 int dia;
@@ -107,27 +113,34 @@ int prioridadeUrgentePrimeiro;// 1: sempre tentar marcar urgente no 1o slot livr
 */
 //isso aq eu vou ver dps
 
-//funcoes aqui embaixo ----------
+//funcoes genericas aqui embaixo ----------
 void ler_buffer(char buffer[]);
 int verificartoken(char *token, int *numero, int limite_menor, int limite_maior);
 void imprimir_opcoes();
 void Limpar_Tela();
 void buffer_completo(int *num, int limite_menor, int limite_maior);
-void redimensionar_vetor_medico(VetMedicos *ptr);
-void redimensionar_vetor_paciente(VetPacientes *ptr);
-void redimensionar_vetor_consulta(VetConsultas *ptr);
-void adicionar_medico(VetMedicos *ptr);
+void redimensionar_vetores(void *ptr, int tipo);
+int definir_id(void *ptr, int protocolo);
 void Retirar_Enter(char nome[TAM_MAXIMO]);
+void pausar_programa(int segundos);
+void pausar_e_limpar_buffer();
+
+//-----------------------------------------------
+//funcoes de medicos.c
+void adicionar_medico(VetMedicos *ptr);
 void definir_especialidade(Medico *ptr);
 void definir_horario(Horario *ptr, int limite_menor, int limite_maior);
-void pausar_programa(int segundos);
-int definir_id(void *ptr, int protocolo);
-void adicionar_paciente(VetPacientes *ptr);
-void remover_pac_med(void *ptr, int protocolo);
-void pausar_e_limpar_buffer();
-void listar_todos(void *ptr, int protocolo);
-void listar_especifico(void *ptr, int protocolo);
 void imprimir_medico(Medico dado);
+void listar_medico_especifico(VetMedicos *vetor_med);
+void listar_medicos(VetMedicos *vetor_med);
+void remover_medico(VetMedicos *vetor_med);
+
+//------------------------------------------------
+//funcoes de pacientes.c
+void adicionar_paciente(VetPacientes *ptr);
 void imprimir_paciente(Paciente dado);
+void remover_paciente(VetPacientes *vetor_pac);
+void listar_pacientes(VetPacientes *vetor_pac);
+void listar_paciente_especifico(VetPacientes *vetor_pac);
 
 #endif

@@ -46,3 +46,6 @@ int buscar_indice_por_id(void *ptr, int protocolo, int id_procurado) {
     return -1; // Retorna -1 se não encontrou
 }
 dps eu faco essa bosta
+
+//
+declarar as funcoes necessarias para static

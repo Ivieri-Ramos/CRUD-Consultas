@@ -485,8 +485,3 @@ void imprimir_paciente(Paciente dado){
     printf("Telefone do paciente: %s\n", dado.telefone);
     printf("\n--------------------\n\n");    
 }
-
-void mudar_med_pac(void *ptr, int protocolo){
-    int i;
-
-}
