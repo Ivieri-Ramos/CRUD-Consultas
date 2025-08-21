@@ -1,18 +1,3 @@
-/**
- * @brief Exibe um sub-menu para o usuário escolher entre Médico ou Paciente.
- * @param acao Uma string descrevendo a ação (ex: "remover", "listar").
- * @return O protocolo escolhido (PROTOCOLO_MEDICO ou PROTOCOLO_PACIENTE).
- */
-int obter_protocolo(const char *acao) {
-    int protocolo;
-    Limpar_Tela();
-    printf("Voce deseja %s um medico ou um paciente?\n", acao);
-    printf("Digite 0 para Medico ou 1 para Paciente: ");
-    buffer_completo(&protocolo, PROTOCOLO_MEDICO, PROTOCOLO_PACIENTE);
-    return protocolo;
-}
-//
-
 buscar indice por id
 /**
  * @brief Busca por um ID em um vetor genérico e retorna o índice.
@@ -43,7 +28,3 @@ dps eu faco essa bosta
 
 //
 declarar as funcoes necessarias para static
-
-//
-fazer um menu interativo, separando em querer mudar medicos, pacientes e consultas, cada um
-em seu respectivo arquivo
