@@ -146,6 +146,7 @@ void switch_paciente(VetPacientes *vetor_pac){
             }
             case ATUALIZAR:{
                 Limpar_Tela();
+                atualizar_paciente(vetor_pac);
                 break;
             }
             case MENU:{
@@ -156,4 +157,61 @@ void switch_paciente(VetPacientes *vetor_pac){
             }
         }    
     }
+}
+
+void atualizar_paciente(VetPacientes *vetor_pac){
+    int i, id, maior_id;
+    char buffer[TAM_MAXIMO];
+    if (vetor_pac -> qtd == 0){
+        printf("Nao ha nenhum paciente cadastrado, retornando ao menu...\n");
+        pausar_programa(2);
+        return;
+    }
+    maior_id = definir_id(vetor_pac, PACIENTE) - 1; //decrementar pois assim acha o maior id possivel
+    printf("Digite o id do paciente que voce busca atualizar: ");
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_pac, PACIENTE, id);
+    Limpar_Tela();
+
+    if (i == -1){
+        printf("Id nao encontrado, por favor, insira um id valido na proxima\n");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+    printf("-----Hora de atualizar os dados-----\n"); 
+    printf("Pressione Enter caso nao pretenda atualizar o dado especifico(sem ter digitado nenhum caractere antes)\n");
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
+
+    printf("Digite o novo nome do paciente: ");
+    ler_buffer(buffer);
+    if (string_vazia(buffer) == 0){
+        Retirar_Enter(buffer);
+        strcpy(vetor_pac -> ponteiro_pac[i].nome, buffer);
+    }
+    Limpar_Tela();
+    
+    printf("Digite o novo e-mail do paciente: ");
+    ler_buffer(buffer);
+    if (string_vazia(buffer) == 0){
+        Retirar_Enter(buffer);
+        strcpy(vetor_pac -> ponteiro_pac[i].email, buffer);
+    }
+
+    Limpar_Tela();
+    printf("Digite o novo telefone do paciente: ");
+    ler_buffer(buffer);
+    if (string_vazia(buffer) == 0){
+        Retirar_Enter(buffer);
+        snprintf(vetor_pac->ponteiro_pac[i].telefone, TAM_MINIMO, "%s", buffer);
+    }
+    Limpar_Tela();
+
+    printf("Paciente atualizado!\n");
+    printf("Aqui esta os novos dados:\n");
+    imprimir_paciente(vetor_pac -> ponteiro_pac[i]);
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
+
 }

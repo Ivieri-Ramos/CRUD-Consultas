@@ -65,7 +65,7 @@ void adicionar_medico(VetMedicos *ptr){
     Limpar_Tela();
 }
 
-void definir_especialidade(Medico *ptr){
+static void definir_especialidade(Medico *ptr){
     int valor;
     imprimir_especialidade();
     buffer_completo(&valor, ESPEC_CLINICO, ESPEC_OUTRA);
@@ -73,7 +73,7 @@ void definir_especialidade(Medico *ptr){
     Limpar_Tela();
 }
 
-void definir_horario(Horario *ptr, int limite_menor, int limite_maior){
+static void definir_horario(Horario *ptr, int limite_menor, int limite_maior){
     char buffer[TAMANHO_BUFFER];
     int qtd_lidos;
     while(1){
@@ -239,7 +239,7 @@ void switch_medico(VetMedicos *vetor_med){
     }
 }
 
-void imprimir_especialidade(){
+static void imprimir_especialidade(){
     printf("---Defina a especialidade do medico---\n\n");
     printf("Digite 0 para ESPEC_CLINICO;\n");
     printf("Digite 1 para ESPEC_PEDIATRA;\n");
@@ -302,9 +302,9 @@ void atualizar_medico(VetMedicos *vetor_med){
     Limpar_Tela();
     printf("Hora de atualizar o horario da manha, defina entra 08:00(inicio) e 12:59(fim)\n\n");
     
-    printf("---Escolha inicio da manha---\n");
+    printf("---Escolha o novo inicio da manha---\n");
     atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
-    printf("---Escolha fim da manha---\n");
+    printf("---Escolha o novo fim da manha---\n");
     atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
     
     while (vetor_med -> ponteiro_med[i].Fim_Manha.hora < vetor_med -> ponteiro_med[i].Inicio_Manha.hora || 
@@ -313,16 +313,16 @@ void atualizar_medico(VetMedicos *vetor_med){
         printf("\nErro: O horario final da manha deve ser apos o horario inicial.\n");
         printf("Por favor, insira os horarios da manha novamente.\n\n");
         
-        printf("---Escolha inicio da manha---\n");
+        printf("---Escolha o novo inicio da manha---\n");
         atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
-        printf("---Escolha fim da manha---\n");
+        printf("---Escolha o novo fim da manha---\n");
         atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
     }
 
     printf("Hora de definir o horario da tarde, defina entra 14:00(inicio) e 18:59(fim)\n\n");
-    printf("---Escolha inicio da tarde---\n");
+    printf("---Escolha o novo inicio da tarde---\n");
     atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
-    printf("---Escolha fim da tarde---\n");
+    printf("---Escolha o novo fim da tarde---\n");
     atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
     
     while (vetor_med -> ponteiro_med[i].Fim_Tarde.hora < vetor_med -> ponteiro_med[i].Inicio_Tarde.hora || 
@@ -331,9 +331,9 @@ void atualizar_medico(VetMedicos *vetor_med){
         printf("\nErro: O horario final da tarde deve ser apos o horario inicial.\n");
         printf("Por favor, insira os horarios da tarde novamente.\n\n");
         
-        printf("---Escolha inicio da tarde---\n");
+        printf("---Escolha o novo inicio da tarde---\n");
         atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
-        printf("---Escolha fim da tarde---\n");
+        printf("---Escolha o novo fim da tarde---\n");
         atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
     }
     printf("Medico atualizado!\n");
@@ -343,7 +343,7 @@ void atualizar_medico(VetMedicos *vetor_med){
     Limpar_Tela();
 }
 
-void atualizar_horario(Horario *ptr, int limite_menor, int limite_maior){
+static void atualizar_horario(Horario *ptr, int limite_menor, int limite_maior){
     char buffer[TAMANHO_BUFFER];
     int qtd_lidos;
     while(1){

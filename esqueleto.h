@@ -160,5 +160,7 @@ void remover_paciente(VetPacientes *vetor_pac);
 void listar_pacientes(VetPacientes *vetor_pac);
 void listar_paciente_especifico(VetPacientes *vetor_pac);
 void switch_paciente(VetPacientes *vetor_pac);
+void atualizar_paciente(VetPacientes *vetor_pac);
+
 
 #endif
