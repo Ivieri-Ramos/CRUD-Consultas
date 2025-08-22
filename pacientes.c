@@ -32,23 +32,17 @@ void adicionar_paciente(VetPacientes *ptr){
 }
 
 void remover_paciente(VetPacientes *vetor_pac){
-    int i, num, id_encontrado, id;
-    id_encontrado = -1;
+    int i, maior_id, id;
     if (vetor_pac -> qtd == 0){
         printf("Nao ha nenhum paciente cadastrado, retornando ao menu...\n");
         pausar_programa(2);
         return;
     }
     printf("Digite o id do paciente que sera removido: ");
-    num = definir_id(vetor_pac, PACIENTE) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
-    buffer_completo(&id, 1, num); // 1 e o menor id possivel
-    for (i = 0; i < vetor_pac -> qtd; i++){
-        if (vetor_pac -> ponteiro_pac[i].id == id){
-            id_encontrado = (int) id;
-            break;
-        }
-    }
-    if (id_encontrado != -1){
+    maior_id = definir_id(vetor_pac, PACIENTE) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
+    buffer_completo(&id, 1, maior_id); // 1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_pac, PACIENTE, id);
+    if (i != -1){
         for (; i < vetor_pac -> qtd - 1; i++){ // -1 pois se nao ele acessa memoria invalida
             vetor_pac -> ponteiro_pac[i] = vetor_pac -> ponteiro_pac[i + 1];
         }
@@ -84,8 +78,7 @@ void listar_pacientes(VetPacientes *vetor_pac){
 
 void listar_paciente_especifico(VetPacientes *vetor_pac){
     Limpar_Tela();
-    int i, maior_id, especialidade, id_encontrado, id_procurado;
-    id_encontrado = -1;
+    int i, maior_id, id;
     if (vetor_pac -> qtd == 0){
         printf("Nao ha nenhum paciente cadastrado, retornando ao menu...\n");
         pausar_programa(2);
@@ -93,14 +86,9 @@ void listar_paciente_especifico(VetPacientes *vetor_pac){
     }
     maior_id = definir_id(vetor_pac, PACIENTE) - 1; //decrementar pois assim acha o maior id possivel
     printf("Digite o id do paciente que voce busca: ");
-    buffer_completo(&id_procurado, 1, maior_id); //1 e o menor id possivel
-    for(i = 0; i < vetor_pac -> qtd; i++){
-        if (vetor_pac -> ponteiro_pac[i].id == id_procurado){
-            id_encontrado = i;
-            break;
-        }
-    }
-    if (id_encontrado != -1){
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_pac, PACIENTE, id);
+    if (i != -1){
     imprimir_paciente(vetor_pac -> ponteiro_pac[i]);
     }
         else{

@@ -139,17 +139,18 @@ int definir_id(void *ptr, int protocolo);
 void Retirar_Enter(char nome[TAM_MAXIMO]);
 void pausar_programa(int segundos);
 void pausar_e_limpar_buffer();
+int buscar_indice_por_id(void *ptr, int tipo, int id_procurado);
+int string_vazia(const char buffer[]);
 
 //-----------------------------------------------
 //funcoes de medicos.c
 void adicionar_medico(VetMedicos *ptr);
-void definir_especialidade(Medico *ptr);
-void definir_horario(Horario *ptr, int limite_menor, int limite_maior);
 void imprimir_medico(Medico dado);
 void listar_medico_especifico(VetMedicos *vetor_med);
 void listar_medicos(VetMedicos *vetor_med);
 void remover_medico(VetMedicos *vetor_med);
 void switch_medico(VetMedicos *vetor_med);
+void atualizar_medico(VetMedicos *vetor_med);
 
 //------------------------------------------------
 //funcoes de pacientes.c

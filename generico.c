@@ -153,3 +153,34 @@ void pausar_e_limpar_buffer(){
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
+
+int buscar_indice_por_id(void *ptr, int tipo, int id_procurado){
+    int i;
+    if (tipo == MEDICO) {
+        VetMedicos *vetor_med = (VetMedicos *) ptr;
+        for (i = 0; i < vetor_med -> qtd; i++) {
+            if (vetor_med -> ponteiro_med[i].id == id_procurado) {
+                return i; // Retorna a posicao do i onde foi encontrado
+            }
+        }
+    } 
+        else if (tipo == PACIENTE) {
+            VetPacientes *vetor_pac = (VetPacientes *) ptr;
+            for (int i = 0; i < vetor_pac -> qtd; i++) {
+                if (vetor_pac -> ponteiro_pac[i].id == id_procurado) {
+                    return i; // Retorna a posicao do i onde foi encontrado
+                }
+            }
+        }
+    return -1; // Retorna -1 se não encontrou o id
+}
+
+int string_vazia(const char buffer[]){
+    while (*buffer != '\0') {
+        if (!isspace((unsigned char)*buffer)) {
+            return 0; 
+        }
+        buffer++;
+    }
+    return 1;
+}

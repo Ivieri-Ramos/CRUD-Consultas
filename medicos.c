@@ -1,4 +1,11 @@
 #include "esqueleto.h"
+// Em medicos.c
+
+// Marque as funções que são APENAS usadas dentro deste arquivo como static
+static void definir_especialidade(Medico *ptr);
+static void definir_horario(Horario *ptr, int limite_menor, int limite_maior);
+static void atualizar_horario(Horario *ptr, int limite_menor, int limite_maior);
+static void imprimir_especialidade();
 
 void adicionar_medico(VetMedicos *ptr){
     int i;
@@ -60,13 +67,7 @@ void adicionar_medico(VetMedicos *ptr){
 
 void definir_especialidade(Medico *ptr){
     int valor;
-    printf("---Defina a especialidade do medico---\n\n");
-    printf("Digite 0 para ESPEC_CLINICO;\n");
-    printf("Digite 1 para ESPEC_PEDIATRA;\n");
-    printf("Digite 2 para ESPEC_DERMATO;\n");
-    printf("Digite 3 para ESPEC_CARDIO;\n");
-    printf("Digite 4 para ESPEC_OUTRA;\n");
-    printf("Digite aqui: ");
+    imprimir_especialidade();
     buffer_completo(&valor, ESPEC_CLINICO, ESPEC_OUTRA);
     ptr -> especialidade = (int) valor;
     Limpar_Tela();
@@ -86,30 +87,25 @@ void definir_horario(Horario *ptr, int limite_menor, int limite_maior){
             ptr->minuto > MINUTOS_MAX){
             printf("Formato invalido, por favor, digite no formato HH:MM dentro do limite permitido!\n");
         }
-        else
-        break;
+            else{
+            break;
+            }
     }
     Limpar_Tela();    
 }
 
 void remover_medico(VetMedicos *vetor_med){
-    int i, num, id_encontrado, id;
-    id_encontrado = -1;
+    int i, maior_id, id;
     if (vetor_med -> qtd == 0){
         printf("Nao ha nenhum medico cadastrado, retornando ao menu...\n");
         pausar_programa(2);
         return;
     }
     printf("Digite o id do medico que sera removido: ");
-    num = definir_id(vetor_med, MEDICO) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
-    buffer_completo(&id, 1, num); //1 e o menor id possivel
-    for (i = 0; i < vetor_med -> qtd; i++){
-        if (vetor_med -> ponteiro_med[i].id == id){
-            id_encontrado = (int) id;
-            break;
-        }
-    }
-    if (id_encontrado != -1){
+    maior_id = definir_id(vetor_med, MEDICO) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_med, MEDICO, id);
+    if (i != -1){
         for (; i < vetor_med -> qtd - 1; i++){ // -1 pois se nao ele acessa memoria invalida
             vetor_med -> ponteiro_med[i] = vetor_med -> ponteiro_med[i + 1];
         }
@@ -146,8 +142,7 @@ void listar_medicos(VetMedicos *vetor_med){
 
 void listar_medico_especifico(VetMedicos *vetor_med){
     Limpar_Tela();
-    int i, maior_id, especialidade, id_encontrado, id_procurado;
-    id_encontrado = -1;
+    int i, maior_id, especialidade, id;
     if (vetor_med -> qtd == 0){
         printf("Nao ha nenhum medico cadastrado, retornando ao menu...\n");
         pausar_programa(2);
@@ -155,15 +150,10 @@ void listar_medico_especifico(VetMedicos *vetor_med){
     }
     maior_id = definir_id(vetor_med, MEDICO) - 1; //decrementar pois assim acha o maior id possivel
     printf("Digite o id do medico que voce busca: ");
-    buffer_completo(&id_procurado, 1, maior_id); //1 e o menor id possivel
-    for(i = 0; i < vetor_med -> qtd; i++){
-        if (vetor_med -> ponteiro_med[i].id == id_procurado){
-            id_encontrado = i;
-            break;
-        }
-    }
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_med, MEDICO, id);
     Limpar_Tela();
-    if (id_encontrado != -1){
+    if (i != -1){
         imprimir_medico(vetor_med -> ponteiro_med[i]);
     }
         else{
@@ -236,6 +226,7 @@ void switch_medico(VetMedicos *vetor_med){
             }
             case ATUALIZAR:{
                 Limpar_Tela();
+                atualizar_medico(vetor_med);
                 break;
             }
             case MENU:{
@@ -246,4 +237,132 @@ void switch_medico(VetMedicos *vetor_med){
             }
         }    
     }
+}
+
+void imprimir_especialidade(){
+    printf("---Defina a especialidade do medico---\n\n");
+    printf("Digite 0 para ESPEC_CLINICO;\n");
+    printf("Digite 1 para ESPEC_PEDIATRA;\n");
+    printf("Digite 2 para ESPEC_DERMATO;\n");
+    printf("Digite 3 para ESPEC_CARDIO;\n");
+    printf("Digite 4 para ESPEC_OUTRA;\n");
+    printf("Digite aqui: ");
+}
+
+void atualizar_medico(VetMedicos *vetor_med){
+    int i, id, maior_id, especialidade;
+    char buffer[TAM_MAXIMO], *token;
+    if (vetor_med -> qtd == 0){
+        printf("Nao ha nenhum medico cadastrado, retornando ao menu...\n");
+        pausar_programa(2);
+        return;
+    }
+    maior_id = definir_id(vetor_med, MEDICO) - 1; //decrementar pois assim acha o maior id possivel
+    printf("Digite o id do medico que voce busca atualizar: ");
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_med, MEDICO, id);
+    Limpar_Tela();
+
+    if (i == -1){
+        printf("Id nao encontrado, por favor, insira um id valido na proxima\n");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+    printf("-----Hora de atualizar os dados-----\n"); 
+    printf("Pressione Enter caso nao pretenda atualizar o dado especifico(sem ter digitado nenhum caractere antes)\n");
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
+
+    printf("Digite o nome do medico: ");
+    ler_buffer(buffer);
+    if (string_vazia(buffer) == 0){
+        Retirar_Enter(buffer);
+        strcpy(vetor_med -> ponteiro_med[i].nome, buffer);
+    }
+    Limpar_Tela();
+
+    imprimir_especialidade();
+    while(1){
+        ler_buffer(buffer);
+        if (!string_vazia(buffer)){
+            token = strtok(buffer, "\n");
+            if (!verificartoken(token, &especialidade, ESPEC_CLINICO, ESPEC_OUTRA)){
+                printf("Por favor, digite uma especialidade valida\n");
+                imprimir_especialidade();
+                continue;
+            }
+            vetor_med -> ponteiro_med[i].especialidade = especialidade;
+            break;
+        }
+            else{
+                break;
+            }
+    }
+    Limpar_Tela();
+    printf("Hora de atualizar o horario da manha, defina entra 08:00(inicio) e 12:59(fim)\n\n");
+    
+    printf("---Escolha inicio da manha---\n");
+    atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
+    printf("---Escolha fim da manha---\n");
+    atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
+    
+    while (vetor_med -> ponteiro_med[i].Fim_Manha.hora < vetor_med -> ponteiro_med[i].Inicio_Manha.hora || 
+        (vetor_med -> ponteiro_med[i].Fim_Manha.hora == vetor_med -> ponteiro_med[i].Inicio_Manha.hora && 
+        vetor_med -> ponteiro_med[i].Fim_Manha.minuto <= vetor_med -> ponteiro_med[i].Inicio_Manha.minuto)) {
+        printf("\nErro: O horario final da manha deve ser apos o horario inicial.\n");
+        printf("Por favor, insira os horarios da manha novamente.\n\n");
+        
+        printf("---Escolha inicio da manha---\n");
+        atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Manha, MANHA_MIN, MANHA_MAX);
+        printf("---Escolha fim da manha---\n");
+        atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Manha, MANHA_MIN, MANHA_MAX);
+    }
+
+    printf("Hora de definir o horario da tarde, defina entra 14:00(inicio) e 18:59(fim)\n\n");
+    printf("---Escolha inicio da tarde---\n");
+    atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
+    printf("---Escolha fim da tarde---\n");
+    atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
+    
+    while (vetor_med -> ponteiro_med[i].Fim_Tarde.hora < vetor_med -> ponteiro_med[i].Inicio_Tarde.hora || 
+        (vetor_med -> ponteiro_med[i].Fim_Tarde.hora == vetor_med -> ponteiro_med[i].Inicio_Tarde.hora && 
+        vetor_med -> ponteiro_med[i].Fim_Tarde.minuto <= vetor_med -> ponteiro_med[i].Inicio_Tarde.minuto)) {
+        printf("\nErro: O horario final da tarde deve ser apos o horario inicial.\n");
+        printf("Por favor, insira os horarios da tarde novamente.\n\n");
+        
+        printf("---Escolha inicio da tarde---\n");
+        atualizar_horario(&vetor_med -> ponteiro_med[i].Inicio_Tarde, TARDE_MIN, TARDE_MAX);
+        printf("---Escolha fim da tarde---\n");
+        atualizar_horario(&vetor_med -> ponteiro_med[i].Fim_Tarde, TARDE_MIN, TARDE_MAX);
+    }
+    printf("Medico atualizado!\n");
+    printf("Aqui esta os novos dados:\n");
+    imprimir_medico(vetor_med -> ponteiro_med[i]);
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
+}
+
+void atualizar_horario(Horario *ptr, int limite_menor, int limite_maior){
+    char buffer[TAMANHO_BUFFER];
+    int qtd_lidos;
+    while(1){
+        ler_buffer(buffer);
+        if (string_vazia(buffer) == 1){
+            return;
+        }
+        qtd_lidos = sscanf(buffer, "%d:%d", &ptr -> hora, &ptr -> minuto);
+
+        if (qtd_lidos != 2 || 
+            ptr->hora < limite_menor || 
+            ptr->hora > limite_maior || 
+            ptr->minuto < MINUTOS_MIN || 
+            ptr->minuto > MINUTOS_MAX){
+            printf("Formato invalido, por favor, digite no formato HH:MM dentro do limite permitido!\n");
+        }
+            else{
+            break;
+            }
+    }
+    Limpar_Tela();    
 }
