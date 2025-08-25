@@ -122,28 +122,38 @@ void pausar_programa(int segundos) {
     #endif
 }
 
-int definir_id(void *ptr, int protocolo){
+int definir_id(void *ptr, int tipo){
     int qtd, maior_id, i;
     maior_id = 0;
-    switch (protocolo){
+    switch (tipo){
         case MEDICO:{
-        VetMedicos *vetor_med = (VetMedicos *) ptr;
-        qtd = vetor_med -> qtd;
-        for (i = 0; i < qtd; i++){
-            if (vetor_med -> ponteiro_med[i].id > maior_id)
-            maior_id = vetor_med -> ponteiro_med[i].id;
-        }
+            VetMedicos *vetor_med = (VetMedicos *) ptr;
+            qtd = vetor_med -> qtd;
+            for (i = 0; i < qtd; i++){
+                if (vetor_med -> ponteiro_med[i].id > maior_id)
+                maior_id = vetor_med -> ponteiro_med[i].id;
+            }
         break;
     }
         case PACIENTE:{
-        VetPacientes *vetor_pac = (VetPacientes *) ptr;
-        qtd = vetor_pac -> qtd;
-        for (i = 0; i < qtd; i++){
-            if (vetor_pac -> ponteiro_pac[i].id > maior_id)
-            maior_id = vetor_pac -> ponteiro_pac[i].id;
-        }
+            VetPacientes *vetor_pac = (VetPacientes *) ptr;
+            qtd = vetor_pac -> qtd;
+            for (i = 0; i < qtd; i++){
+                if (vetor_pac -> ponteiro_pac[i].id > maior_id)
+                maior_id = vetor_pac -> ponteiro_pac[i].id;
+            }
         break;
         }
+        case CONSULTA:{
+            VetConsultas *vetor_con = (VetConsultas *) ptr;
+            qtd = vetor_con -> qtd;
+            for (i = 0; i < qtd; i++){
+                if (vetor_con -> ponteiro_con[i].num_consulta > maior_id)
+                maior_id = vetor_con -> ponteiro_con[i].num_consulta;
+            }
+            break;
+        }
+    
     }
     return maior_id + 1;
 }
@@ -156,22 +166,35 @@ void pausar_e_limpar_buffer(){
 
 int buscar_indice_por_id(void *ptr, int tipo, int id_procurado){
     int i;
-    if (tipo == MEDICO) {
-        VetMedicos *vetor_med = (VetMedicos *) ptr;
-        for (i = 0; i < vetor_med -> qtd; i++) {
-            if (vetor_med -> ponteiro_med[i].id == id_procurado) {
-                return i; // Retorna a posicao do i onde foi encontrado
+    switch (tipo){
+        case MEDICO:{
+            VetMedicos *vetor_med = (VetMedicos *) ptr;
+            for (i = 0; i < vetor_med -> qtd; i++) {
+                if (vetor_med -> ponteiro_med[i].id == id_procurado) {
+                    return i; // Retorna a posicao do i onde foi encontrado
+                }
             }
+            break;
         }
-    } 
-        else if (tipo == PACIENTE) {
+        case PACIENTE:{
             VetPacientes *vetor_pac = (VetPacientes *) ptr;
-            for (int i = 0; i < vetor_pac -> qtd; i++) {
+            for (i = 0; i < vetor_pac -> qtd; i++) {
                 if (vetor_pac -> ponteiro_pac[i].id == id_procurado) {
                     return i; // Retorna a posicao do i onde foi encontrado
                 }
             }
+            break;
         }
+        case CONSULTA:{
+            VetConsultas *vetor_con = (VetConsultas *) ptr;
+            for (i = 0; i < vetor_con -> qtd; i++) {
+                if (vetor_con -> ponteiro_con[i].num_consulta == id_procurado) {
+                    return i; // Retorna a posicao do i onde foi encontrado
+                }
+            }
+        }
+    }
+    
     return -1; // Retorna -1 se não encontrou o id
 }
 

@@ -212,3 +212,34 @@ static int definir_hora_consulta(Horario *ptr_con, Medico ptr_med){
     Limpar_Tela();    
     return 1;
 }
+
+void mudar_status(VetConsultas *vetor_con){
+    int id_procurado, maior_id, id, numero;
+    Limpar_Tela();
+    if (vetor_con -> qtd == 0){
+        printf("Nao ha nenhuma consulta cadastrada, retornando ao menu...");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+    
+    printf("Digite o numero da consulta para mudar o status: ");
+    maior_id = definir_id(vetor_con, CONSULTA) - 1; //decrementar um, pois a funcao gera um id + 1, foi apenas um contorno
+    buffer_completo(&id_procurado, 1, maior_id); // 1 e o menor id possivel
+    id = buscar_indice_por_id(vetor_con, CONSULTA, id_procurado);
+    Limpar_Tela();
+
+    if (id == -1){
+        printf("Consulta nao encontrada, por favor, insira um numero valido na proxima\n");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;                
+    }
+    
+    printf("Digite 1 para mudar status para concluida;\n");
+    printf("Digite 2 para mudar status para canceladaa;\n");
+    printf("Digite 3 para mudar status para falta;\n");
+    printf("Digite aqui: ");
+    buffer_completo(&numero, CONS_CONCLUIDA, CONS_FALTA);
+    vetor_con -> ponteiro_con[id].status = numero;
+}

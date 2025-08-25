@@ -69,7 +69,7 @@ static void definir_especialidade(Medico *ptr){
     int valor;
     imprimir_especialidade();
     buffer_completo(&valor, ESPEC_CLINICO, ESPEC_OUTRA);
-    ptr -> especialidade = (int) valor;
+    ptr -> especialidade = valor;
     Limpar_Tela();
 }
 
