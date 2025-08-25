@@ -11,6 +11,17 @@
 #define TARDE_MAX 18
 #define MINUTOS_MIN 0
 #define MINUTOS_MAX 59
+#define DURACAO_CONSULTA 30
+#define HORA_MIN 0
+#define HORA_MAX 23
+
+//necessario apenas para data
+#define MENOR_DIA 1
+#define MAIOR_DIA 31
+#define MENOR_MES 1
+#define MAIOR_MES 12
+#define MENOR_ANO 1
+#define MAIOR_ANO 99
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +49,8 @@ typedef enum {
     ATUALIZAR,
     MENU
 } Acoes; //acoes para os cases do paciente e medico;
+
+#define MUDAR_STATUS REMOVER
 
 typedef enum {
     MENU_MEDICO = 1,
@@ -162,5 +175,9 @@ void listar_paciente_especifico(VetPacientes *vetor_pac);
 void switch_paciente(VetPacientes *vetor_pac);
 void atualizar_paciente(VetPacientes *vetor_pac);
 
+//------------------------------------------------
+//funcoes de consultas.c
+void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
+void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
 
 #endif

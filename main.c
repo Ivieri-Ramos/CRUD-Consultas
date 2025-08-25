@@ -7,6 +7,7 @@ int main(){
     VetConsultas vetor_consultas = {NULL, 0, 0};
     redimensionar_vetores(&vetor_medicos, MEDICO);
     redimensionar_vetores(&vetor_pacientes, PACIENTE);
+    redimensionar_vetores(&vetor_consultas, CONSULTA);
 
     while(1){
         Limpar_Tela();
@@ -24,13 +25,13 @@ int main(){
                 switch_paciente(&vetor_pacientes);
                 break;
             }
-            case MENU_CONSULTA:{ //listar todos os medicos/pacientes
-            
+            case MENU_CONSULTA:{ //menu consulta
+                Limpar_Tela();
+                switch_consulta(&vetor_consultas, &vetor_pacientes, &vetor_medicos);
                 break;
             }
-            case MENU_BACKUP:{ //buscar paciente/medico especifico
-            
-            
+            case MENU_BACKUP:{ //realizar backup do sistema
+                
                 break;
             }    
             case MENU_FINALIZAR:{ //finalizar programa
