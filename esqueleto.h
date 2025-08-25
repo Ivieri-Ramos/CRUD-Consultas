@@ -179,5 +179,6 @@ void atualizar_paciente(VetPacientes *vetor_pac);
 //funcoes de consultas.c
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
 void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
+void mudar_status(VetConsultas *vetor_con);
 
 #endif

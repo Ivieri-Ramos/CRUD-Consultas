@@ -3,6 +3,7 @@
 static void ler_data(Data *ptr);
 static int definir_hora_consulta(Horario *ptr_con, Medico ptr_med);
 static int hora_para_minutos(Horario ptr);
+static void imprimir_consulta(Consulta dado);
 
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med){
     int op;
@@ -25,6 +26,7 @@ void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedico
                 break;
             }
             case MUDAR_STATUS:{
+                mudar_status(vetor_con);
                 Limpar_Tela();
                 break;
             }
@@ -242,4 +244,42 @@ void mudar_status(VetConsultas *vetor_con){
     printf("Digite aqui: ");
     buffer_completo(&numero, CONS_CONCLUIDA, CONS_FALTA);
     vetor_con -> ponteiro_con[id].status = numero;
+    Limpar_Tela();
+
+    printf("Status mudado com sucesso!");
+    pausar_programa(2);
+    Limpar_Tela();
+}
+
+void listar_consultas(VetConsultas *vetor_con){
+    int i;
+    Limpar_Tela();
+    if (vetor_con -> qtd == 0){
+        printf("Nao ha nenhuma consulta cadastrada, voltando para o menu...\n");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+    printf("-----Todos as consultas cadastradas-----\n\n");
+    for (i = 0; i < vetor_con -> qtd; i++){
+        imprimir_consulta(vetor_con -> ponteiro_con[i]);
+    }
+    pausar_e_limpar_buffer();        
+    Limpar_Tela();
+}
+
+static void imprimir_consulta(Consulta dado){
+    printf("Numero da consulta: %d\n", dado.num_consulta);
+    printf("Id do paciente: %d\n", dado.id_Paciente);
+    printf("Id do medico: %d\n", dado.id_Medico);
+    printf("Data da consulta: %02d/%02d/%02d\n", dado.data.dia, dado.data.mes, dado.data.ano);
+    printf("Horario de inicio da consulta: %02d:%02d\n", dado.inicio.hora, dado.inicio.minuto);
+    printf("Horario de fim da consulta: %02d:%02d\n", dado.fim.hora, dado.fim.minuto);
+    switch (dado.status){
+        case CONS_AGENDADA: printf("Status da consulta: consulta agendada\n"); break;
+        case CONS_CONCLUIDA: printf("Status da consulta: consulta concluida\n"); break;
+        case CONS_CANCELADA: printf("Status da consulta: consulta cancelada\n"); break;
+        case CONS_FALTA: printf("Status da consulta: paciente faltou a consulta\n"); break;
+    }
+    printf("\n--------------------\n\n");    
 }
