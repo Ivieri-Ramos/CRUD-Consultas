@@ -1,6 +1,13 @@
 #include "esqueleto.h"
 
-void adicionar_paciente(VetPacientes *ptr){
+static void adicionar_paciente(VetPacientes *ptr);
+static void imprimir_paciente(Paciente dado);
+static void remover_paciente(VetPacientes *vetor_pac);
+static void listar_pacientes(VetPacientes *vetor_pac);
+static void atualizar_paciente(VetPacientes *vetor_pac);
+static void listar_paciente_especifico(VetPacientes *vetor_pac);
+
+static void adicionar_paciente(VetPacientes *ptr){
     int i;
     Limpar_Tela();
     if (ptr -> qtd == ptr -> cap){
@@ -31,7 +38,7 @@ void adicionar_paciente(VetPacientes *ptr){
     ptr -> qtd++;
 }
 
-void remover_paciente(VetPacientes *vetor_pac){
+static void remover_paciente(VetPacientes *vetor_pac){
     int i, maior_id, id;
     if (vetor_pac -> qtd == 0){
         printf("Nao ha nenhum paciente cadastrado, retornando ao menu...\n");
@@ -59,7 +66,7 @@ void remover_paciente(VetPacientes *vetor_pac){
         }
 }
 
-void listar_pacientes(VetPacientes *vetor_pac){
+static void listar_pacientes(VetPacientes *vetor_pac){
     int i;
     Limpar_Tela();
     if (vetor_pac -> qtd == 0){
@@ -76,7 +83,7 @@ void listar_pacientes(VetPacientes *vetor_pac){
     Limpar_Tela();
 }
 
-void listar_paciente_especifico(VetPacientes *vetor_pac){
+static void listar_paciente_especifico(VetPacientes *vetor_pac){
     Limpar_Tela();
     int i, maior_id, id;
     if (vetor_pac -> qtd == 0){
@@ -101,7 +108,7 @@ void listar_paciente_especifico(VetPacientes *vetor_pac){
     Limpar_Tela();
 }
 
-void imprimir_paciente(Paciente dado){
+static void imprimir_paciente(Paciente dado){
     printf("Nome do paciente: %s\n", dado.nome);
     printf("Id do paciente: %d\n", dado.id);
     printf("E-mail do paciente: %s\n", dado.email);
@@ -159,7 +166,7 @@ void switch_paciente(VetPacientes *vetor_pac){
     }
 }
 
-void atualizar_paciente(VetPacientes *vetor_pac){
+static void atualizar_paciente(VetPacientes *vetor_pac){
     int i, id, maior_id;
     char buffer[TAM_MAXIMO];
     if (vetor_pac -> qtd == 0){

@@ -9,25 +9,25 @@ void ler_buffer(char buffer[]){
     }
 }
 
-int verificartoken(char *token, int *valor, int limite_menor, int limite_maior){
+bool verificartoken(char *token, int *valor, int limite_menor, int limite_maior){
     char *endptr;
     long numero;
 
     numero = strtol(token, &endptr, 10);
     if (endptr == token){
-        return 0;
+        return false;
     }
     while(isspace((unsigned char) *endptr)){
         endptr++;
     }
     if (*endptr != '\0'){
-        return 0;
+        return false;
     }
     if (numero < limite_menor || numero > limite_maior){
-        return 0;
+        return false;
     }
     *valor = (int) numero; 
-    return 1;
+    return true;
 }
 void imprimir_opcoes(){
     printf("-----------------------------------------\n\n");
@@ -198,12 +198,12 @@ int buscar_indice_por_id(void *ptr, int tipo, int id_procurado){
     return -1; // Retorna -1 se não encontrou o id
 }
 
-int string_vazia(const char buffer[]){
+bool string_vazia(const char buffer[]){
     while (*buffer != '\0') {
         if (!isspace((unsigned char)*buffer)) {
-            return 0; 
+            return false; 
         }
         buffer++;
     }
-    return 1;
+    return true;
 }

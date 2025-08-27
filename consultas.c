@@ -1,9 +1,15 @@
 #include "esqueleto.h"
 
-static void ler_data(Data *ptr);
-static int definir_hora_consulta(Horario *ptr_con, Medico ptr_med);
+static void listar_consulta_especifica(VetConsultas *vetor_con);
+static void mudar_status(VetConsultas *vetor_con);
+static void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
+static bool ler_data(Data *ptr);
+static bool definir_hora_consulta(Horario *ptr_con, Medico *ptr_med);
 static int hora_para_minutos(Horario ptr);
 static void imprimir_consulta(Consulta dado);
+static void listar_consultas(VetConsultas *vetor_con);
+static bool definir_hora_completa(VetConsultas *vetor_con, Medico *vetor_med, Data data_selecionada, int id_ignorado, Horario *horario_resultado);
+static void atualizar_consulta(VetConsultas *vetor_con, VetMedicos *vetor_med);
 
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med){
     int op;
@@ -31,15 +37,18 @@ void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedico
                 break;
             }
             case LISTAR_TODOS:{
+                listar_consultas(vetor_con);
                 Limpar_Tela();
                 break;
             }
             case LISTAR_ESPECIFICO:{
+                listar_consulta_especifica(vetor_con);
                 Limpar_Tela();
                 break;
             }
             case ATUALIZAR:{
                 Limpar_Tela();
+                atualizar_consulta(vetor_con, vetor_med);
                 break;
             }
             case MENU:{
@@ -52,7 +61,7 @@ void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedico
     }
 }
 
-void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med){
+static void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med){
     int ip, im, ic, maior_ip, maior_im, id_procurado; //ip = id paciente, im = id medio, ic = id consulta
     Limpar_Tela();
     if (vetor_con -> qtd == vetor_con -> cap){
@@ -96,45 +105,27 @@ void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMed
         Limpar_Tela();
         return;                
     }
+    Data nova_data;
+    ler_data(&nova_data);
+    Limpar_Tela();
 
-    int colisao_medico;
-    ler_data(&vetor_con -> ponteiro_con[ic].data);
+    Horario novo_horario;
     while(1){
-        if (!definir_hora_consulta(&vetor_con -> ponteiro_con[ic].inicio, vetor_med -> ponteiro_med[im])){
-            printf("Digite um horario valido!\n");
+        if (!definir_hora_completa(vetor_con, &vetor_med -> ponteiro_med[im], nova_data, ID_INVALIDO, &novo_horario)){
+            printf("Digite um horario valido!");
+            pausar_programa(2);
             continue;
         }
-        colisao_medico = 0;
-        int inicio_horario = hora_para_minutos(vetor_con -> ponteiro_con[ic].inicio);
-        int fim_horario = hora_para_minutos(vetor_con -> ponteiro_con[ic].inicio) + DURACAO_CONSULTA;
-        int i;
-        
-        for(i = 0; i < vetor_con -> qtd; i++){
-            
-            if (vetor_con -> ponteiro_con[i].id_Medico == vetor_med -> ponteiro_med[im].id &&
-                vetor_con -> ponteiro_con[ic].data.dia == vetor_con -> ponteiro_con[i].data.dia &&
-                vetor_con -> ponteiro_con[ic].data.mes == vetor_con -> ponteiro_con[i].data.mes &&
-                vetor_con -> ponteiro_con[ic].data.ano == vetor_con -> ponteiro_con[i].data.ano){
-                int medico_inicio_horario = hora_para_minutos(vetor_con -> ponteiro_con[i].inicio);
-                int medico_fim_horario = hora_para_minutos(vetor_con -> ponteiro_con[i].fim);
-                
-                if (inicio_horario < medico_fim_horario && fim_horario > medico_inicio_horario){
-                    printf("Ja existe uma consulta nesse horario, por favor, digite outro\n");
-                    pausar_programa(2);
-                    Limpar_Tela();
-                    colisao_medico = 1;
-                    break;
-                }
+            else{
+                break;
             }
-        }
-        if (!colisao_medico){
-            break;
-        }
     }
-    int inicio_min = hora_para_minutos(vetor_con->ponteiro_con[ic].inicio);
-    int fim_min = inicio_min + DURACAO_CONSULTA;
-    vetor_con->ponteiro_con[ic].fim.hora = fim_min / 60;
-    vetor_con->ponteiro_con[ic].fim.minuto = fim_min % 60;
+    
+    int fim_min = hora_para_minutos(novo_horario);
+
+    vetor_con -> ponteiro_con[ic].inicio = novo_horario;  
+    vetor_con -> ponteiro_con[ic].fim.hora = fim_min / 60; 
+    vetor_con -> ponteiro_con[ic].fim.minuto = fim_min % 60; 
     vetor_con -> ponteiro_con[ic].num_consulta = definir_id(vetor_con, CONSULTA);
     vetor_con -> ponteiro_con[ic].status = CONS_AGENDADA;
     vetor_con -> ponteiro_con[ic].id_Medico = vetor_med -> ponteiro_med[im].id;
@@ -147,7 +138,7 @@ void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMed
     Limpar_Tela();
 }
 
-static void ler_data(Data *ptr){
+static bool ler_data(Data *ptr){
     char buffer[TAMANHO_BUFFER];
     int qtd_lidos;
     Limpar_Tela();
@@ -155,6 +146,9 @@ static void ler_data(Data *ptr){
     printf("Digite aqui: ");
     while(1){
         ler_buffer(buffer);
+        if (string_vazia(buffer)){
+            return false;
+        }
         qtd_lidos = sscanf(buffer, "%d/%d/%d", &ptr -> dia, &ptr -> mes, &ptr -> ano);
 
         if (qtd_lidos != 3 || 
@@ -172,6 +166,7 @@ static void ler_data(Data *ptr){
             break;
             }
     }
+    return true;
     Limpar_Tela();    
 }
 
@@ -179,21 +174,64 @@ static int hora_para_minutos(Horario ptr){
     return ptr.hora * 60 + ptr.minuto;
 }
 
-static int definir_hora_consulta(Horario *ptr_con, Medico ptr_med){
+static bool definir_hora_completa(VetConsultas *vetor_con, Medico *vetor_med, Data data_selecionada, int id_consulta_ignorada, Horario *horario_resultado){
+    bool colisao_encontrada;
+    int ic = vetor_con -> qtd;
+    Horario horario_novo;
+    while(1){
+        if (!definir_hora_consulta(&horario_novo, vetor_med)){
+            return false;
+        }
+        colisao_encontrada = false;
+        int inicio_horario = hora_para_minutos(horario_novo);
+        int fim_horario = inicio_horario + DURACAO_CONSULTA;
+        int i;
+        for(i = 0; i < vetor_con -> qtd; i++){
+            Consulta consulta_existente = vetor_con -> ponteiro_con[i];
+
+            if (consulta_existente.num_consulta == id_consulta_ignorada){
+                continue;
+            }
+            if (consulta_existente.id_Medico == vetor_med -> id &&
+                consulta_existente.data.dia == data_selecionada.dia &&
+                consulta_existente.data.mes == data_selecionada.mes &&
+                consulta_existente.data.ano == data_selecionada.ano
+                ){
+                
+                int medico_inicio_horario = hora_para_minutos(vetor_con -> ponteiro_con[i].inicio);
+                int medico_fim_horario = hora_para_minutos(vetor_con -> ponteiro_con[i].fim);
+                
+                if (inicio_horario < medico_fim_horario && fim_horario > medico_inicio_horario){
+                    printf("Ja existe uma consulta nesse horario, por favor, digite outro\n");
+                    pausar_programa(2);
+                    Limpar_Tela();
+                    colisao_encontrada = true;
+                    break;
+                }
+            }
+        }
+        if (!colisao_encontrada) {
+            *horario_resultado = horario_novo; 
+            return true;
+        }
+    }
+}
+
+static bool definir_hora_consulta(Horario *ptr_con, Medico *ptr_med){
     char buffer[TAMANHO_BUFFER];
     int qtd_lidos;
     Limpar_Tela();
     printf("Digite o horario de inicio da consulta no formato HH:MM, dentro dos limites\n");
     printf("Digite aqui: ");
-    int inicio_manha = hora_para_minutos(ptr_med.Inicio_Manha);
-    int fim_manha = hora_para_minutos(ptr_med.Fim_Manha);
-    int inicio_tarde = hora_para_minutos(ptr_med.Inicio_Tarde);
-    int fim_tarde = hora_para_minutos(ptr_med.Fim_Tarde);
+    int inicio_manha = hora_para_minutos(ptr_med -> Inicio_Manha);
+    int fim_manha = hora_para_minutos(ptr_med -> Fim_Manha);
+    int inicio_tarde = hora_para_minutos(ptr_med -> Inicio_Tarde);
+    int fim_tarde = hora_para_minutos(ptr_med -> Fim_Tarde);
 
     while(1){
         ler_buffer(buffer);
-        if (string_vazia(buffer) == 1){
-            return 0;
+        if (string_vazia(buffer)){
+            return false;
         }
         qtd_lidos = sscanf(buffer, "%d:%d", &ptr_con -> hora, &ptr_con -> minuto);
         if (qtd_lidos != 2 || ptr_con -> hora < MANHA_MIN || ptr_con -> hora > TARDE_MAX ||
@@ -212,10 +250,10 @@ static int definir_hora_consulta(Horario *ptr_con, Medico ptr_med){
             }
     }
     Limpar_Tela();    
-    return 1;
+    return true;
 }
 
-void mudar_status(VetConsultas *vetor_con){
+static void mudar_status(VetConsultas *vetor_con){
     int id_procurado, maior_id, id, numero;
     Limpar_Tela();
     if (vetor_con -> qtd == 0){
@@ -251,7 +289,7 @@ void mudar_status(VetConsultas *vetor_con){
     Limpar_Tela();
 }
 
-void listar_consultas(VetConsultas *vetor_con){
+static void listar_consultas(VetConsultas *vetor_con){
     int i;
     Limpar_Tela();
     if (vetor_con -> qtd == 0){
@@ -282,4 +320,88 @@ static void imprimir_consulta(Consulta dado){
         case CONS_FALTA: printf("Status da consulta: paciente faltou a consulta\n"); break;
     }
     printf("\n--------------------\n\n");    
+}
+
+static void listar_consulta_especifica(VetConsultas *vetor_con){
+    Limpar_Tela();
+    int i, maior_id, id;
+    if (vetor_con -> qtd == 0){
+        printf("Nao ha nenhuma consulta cadastrada, retornando ao menu...\n");
+        pausar_programa(2);
+        return;
+    }
+    maior_id = definir_id(vetor_con, CONSULTA) - 1; //decrementar pois assim acha o maior id possivel
+    printf("Digite o id do paciente que voce busca: ");
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_con, CONSULTA, id);
+    if (i != -1){
+    imprimir_consulta(vetor_con -> ponteiro_con[i]);
+    }
+        else{
+            printf("Numero de consulta nao encontrado, por favor, insira um numero valido na proxima\n");
+            pausar_programa(2);
+            Limpar_Tela();
+            return;    
+        }
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
+}
+
+static void atualizar_consulta(VetConsultas *vetor_con, VetMedicos *vetor_med){
+    int i, id, maior_id;
+    char buffer[TAM_MAXIMO];
+    if (vetor_con -> qtd == 0){
+        printf("Nao ha nenhuma consulta cadastrada, retornando ao menu...\n");
+        pausar_programa(2);
+        return;
+    }
+    maior_id = definir_id(vetor_con, CONSULTA) - 1; //decrementar pois assim acha o maior id possivel
+    printf("Digite o numero da consulta que voce busca atualizar: ");
+    buffer_completo(&id, 1, maior_id); //1 e o menor id possivel
+    i = buscar_indice_por_id(vetor_con, CONSULTA, id);
+    Limpar_Tela();
+
+    if (i == -1){
+        printf("Numero de consulta nao encontrado, por favor, insira um numero valido na proxima\n");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+    if (vetor_con -> ponteiro_con[i].status != CONS_AGENDADA){
+        printf("So pode atualizar consultas agendadas, retornando ao menu...");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+    printf("-----Hora de atualizar os dados-----\n"); 
+    printf("Pressione Enter caso nao pretenda atualizar o dado especifico(sem ter digitado nenhum caractere antes)\n");
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
+
+    Data data_con;
+    if (!ler_data(&data_con)){
+    }
+        else{
+            printf("Data atualizada com sucesso!");
+            vetor_con -> ponteiro_con[i].data = data_con;
+        }
+    Limpar_Tela();
+
+    int im = vetor_con -> ponteiro_con[i].id_Medico;
+    Horario atualizar_horario;
+    if (!definir_hora_completa(vetor_con, &vetor_med -> ponteiro_med[im], data_con, i, &atualizar_horario)){
+    }
+        else{
+            printf("Horario atualizado com sucesso!");
+            vetor_con -> ponteiro_con[i].inicio = atualizar_horario;
+            int fim_min = hora_para_minutos(atualizar_horario);
+            vetor_con -> ponteiro_con[i].fim.hora = fim_min / 60;
+            vetor_con -> ponteiro_con[i].fim.minuto = fim_min % 60;
+        }
+    Limpar_Tela();
+    
+    printf("Aqui esta os dados atualizados para a consulta:\n");
+    imprimir_consulta(vetor_con -> ponteiro_con[i]);
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
 }

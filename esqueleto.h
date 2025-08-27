@@ -3,7 +3,7 @@
 #define TAM_MINIMO 20 //declaracao para strings
 #define TAM_MAXIMO 64 //declaracao para strings
 #define TAMANHO_BUFFER 100
-
+#define ID_INVALIDO -1
 //necessario apenas para horarios
 #define MANHA_MIN 8
 #define MANHA_MAX 12
@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 #include <time.h> //esse vou ver se vou usar
 
 #ifdef _WIN32
@@ -143,7 +144,7 @@ int prioridadeUrgentePrimeiro;// 1: sempre tentar marcar urgente no 1o slot livr
 
 //funcoes genericas aqui embaixo ----------
 void ler_buffer(char buffer[]);
-int verificartoken(char *token, int *numero, int limite_menor, int limite_maior);
+bool verificartoken(char *token, int *numero, int limite_menor, int limite_maior);
 void imprimir_opcoes();
 void Limpar_Tela();
 void buffer_completo(int *num, int limite_menor, int limite_maior);
@@ -153,32 +154,18 @@ void Retirar_Enter(char nome[TAM_MAXIMO]);
 void pausar_programa(int segundos);
 void pausar_e_limpar_buffer();
 int buscar_indice_por_id(void *ptr, int tipo, int id_procurado);
-int string_vazia(const char buffer[]);
+bool string_vazia(const char buffer[]);
 
 //-----------------------------------------------
-//funcoes de medicos.c
-void adicionar_medico(VetMedicos *ptr);
-void imprimir_medico(Medico dado);
-void listar_medico_especifico(VetMedicos *vetor_med);
-void listar_medicos(VetMedicos *vetor_med);
-void remover_medico(VetMedicos *vetor_med);
+//switch de medicos.c
 void switch_medico(VetMedicos *vetor_med);
-void atualizar_medico(VetMedicos *vetor_med);
 
 //------------------------------------------------
-//funcoes de pacientes.c
-void adicionar_paciente(VetPacientes *ptr);
-void imprimir_paciente(Paciente dado);
-void remover_paciente(VetPacientes *vetor_pac);
-void listar_pacientes(VetPacientes *vetor_pac);
-void listar_paciente_especifico(VetPacientes *vetor_pac);
+//switch de pacientes.c
 void switch_paciente(VetPacientes *vetor_pac);
-void atualizar_paciente(VetPacientes *vetor_pac);
 
 //------------------------------------------------
-//funcoes de consultas.c
+//switch de consultas.c
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
-void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
-void mudar_status(VetConsultas *vetor_con);
 
 #endif

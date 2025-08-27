@@ -1,9 +1,6 @@
-1. tempos, horario e duracao de cada consulta
-3. iniciar os bagui de consulta
 5. urgencia caso haja 
 6. receber arquivos .txt
-7. agendar cada consulta com horarios separados
-
+1. listar as consultas por medico e data.
 .\CRUDRENE.exe
 -----------------------------------------------------------------------------------------------
 

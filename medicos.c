@@ -1,13 +1,17 @@
 #include "esqueleto.h"
-// Em medicos.c
 
-// Marque as funções que são APENAS usadas dentro deste arquivo como static
+static void adicionar_medico(VetMedicos *ptr);
+static void imprimir_medico(Medico dado);
+static void listar_medico_especifico(VetMedicos *vetor_med);
+static void listar_medicos(VetMedicos *vetor_med);
+static void remover_medico(VetMedicos *vetor_med);
+static void atualizar_medico(VetMedicos *vetor_med);
 static void definir_especialidade(Medico *ptr);
 static void definir_horario(Horario *ptr, int limite_menor, int limite_maior);
 static void atualizar_horario(Horario *ptr, int limite_menor, int limite_maior);
 static void imprimir_especialidade();
 
-void adicionar_medico(VetMedicos *ptr){
+static void adicionar_medico(VetMedicos *ptr){
     int i;
     Limpar_Tela();
     if (ptr -> cap == ptr -> qtd){
@@ -94,7 +98,7 @@ static void definir_horario(Horario *ptr, int limite_menor, int limite_maior){
     Limpar_Tela();    
 }
 
-void remover_medico(VetMedicos *vetor_med){
+static void remover_medico(VetMedicos *vetor_med){
     int i, maior_id, id;
     if (vetor_med -> qtd == 0){
         printf("Nao ha nenhum medico cadastrado, retornando ao menu...\n");
@@ -122,7 +126,7 @@ void remover_medico(VetMedicos *vetor_med){
         }
 }
 
-void listar_medicos(VetMedicos *vetor_med){
+static void listar_medicos(VetMedicos *vetor_med){
     int i;
     Limpar_Tela();
     int especialidade;
@@ -140,7 +144,7 @@ void listar_medicos(VetMedicos *vetor_med){
     Limpar_Tela();
 }
 
-void listar_medico_especifico(VetMedicos *vetor_med){
+static void listar_medico_especifico(VetMedicos *vetor_med){
     Limpar_Tela();
     int i, maior_id, especialidade, id;
     if (vetor_med -> qtd == 0){
@@ -166,7 +170,7 @@ void listar_medico_especifico(VetMedicos *vetor_med){
     Limpar_Tela();
 }
 
-void imprimir_medico(Medico dado){
+static void imprimir_medico(Medico dado){
     printf("Nome do medico: %s\n", dado.nome);
     printf("Id do medico: %d\n", dado.id);
     switch (dado.especialidade){
@@ -249,7 +253,7 @@ static void imprimir_especialidade(){
     printf("Digite aqui: ");
 }
 
-void atualizar_medico(VetMedicos *vetor_med){
+static void atualizar_medico(VetMedicos *vetor_med){
     int i, id, maior_id, especialidade;
     char buffer[TAM_MAXIMO], *token;
     if (vetor_med -> qtd == 0){
