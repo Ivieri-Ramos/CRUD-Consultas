@@ -160,6 +160,8 @@ bool string_vazia(const char buffer[]);
 //-----------------------------------------------
 //switch de medicos.c
 void switch_medico(VetMedicos *vetor_med);
+bool carregar_medicos(VetMedicos *vetor_med);
+bool salvar_medicos(const VetMedicos *vetor_med);
 
 //------------------------------------------------
 //switch de pacientes.c

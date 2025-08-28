@@ -280,4 +280,4 @@ bool carregar_pacientes(VetPacientes *vetor_pac){
 
     fclose(arquivo_pacientes);
     return true;
-    }
+}

@@ -370,3 +370,79 @@ static void atualizar_horario(Horario *ptr, int limite_menor, int limite_maior){
     }
     Limpar_Tela();    
 }
+
+bool salvar_medicos(const VetMedicos *vetor_med){
+    FILE *arquivo_medicos = fopen("medicos.txt", "w");
+    int i;
+    if (arquivo_medicos == NULL){
+        printf("Nao foi possivel ler o arquivo de medicos\n");
+        return false;
+    }
+    fprintf(arquivo_medicos, "QTD: %d\n", vetor_med -> qtd);
+    fprintf(arquivo_medicos, "CAP: %d\n", vetor_med -> cap);
+
+    for (i = 0; i < vetor_med -> qtd; i++){
+        Medico dados_medico = vetor_med -> ponteiro_med[i];
+        fprintf(arquivo_medicos, "-----\n");
+        fprintf(arquivo_medicos, "ID: %d\n", dados_medico.id);  
+        fprintf(arquivo_medicos, "NOME: %s\n", dados_medico.nome);  
+        fprintf(arquivo_medicos, "ESPECIALIDADE: %d ", dados_medico.especialidade); 
+        switch (dados_medico.especialidade){
+            case ESPEC_CLINICO: fprintf(arquivo_medicos, "(Especialista clinico)\n"); break;
+            case ESPEC_PEDIATRA: fprintf(arquivo_medicos, "(Especialista pediatra)\n"); break;
+            case ESPEC_DERMATO: fprintf(arquivo_medicos, "(Especialista dermatologista)\n"); break;
+            case ESPEC_CARDIO: fprintf(arquivo_medicos, "(Especialista cardiologista)\n"); break;
+            case ESPEC_OUTRA: fprintf(arquivo_medicos, "(Especialista 'outra')\n"); break;
+        }  
+        fprintf(arquivo_medicos, "TURNO DA MANHA: %02d:%02d ate %02d:%02d\n", 
+        dados_medico.Inicio_Manha.hora, dados_medico.Inicio_Manha.minuto,
+        dados_medico.Fim_Manha.hora, dados_medico.Fim_Manha.minuto);
+        fprintf(arquivo_medicos, "TURNO DA TARDE: %02d:%02d ate %02d:%02d\n", 
+        dados_medico.Inicio_Tarde.hora, dados_medico.Inicio_Tarde.minuto,
+        dados_medico.Fim_Tarde.hora, dados_medico.Fim_Tarde.minuto);          
+    }
+    fprintf(arquivo_medicos, "-----\n");
+    fclose(arquivo_medicos);
+    return true;
+}
+
+bool carregar_medicos(VetMedicos *vetor_med){
+    FILE *arquivo_medicos = fopen("medicos.txt", "r");
+    if (arquivo_medicos == NULL){
+        printf("Nao foi possivel carregar o arquivo de medicos");
+        return false;
+    }   
+    
+    if (fscanf(arquivo_medicos, " QTD: %d", &vetor_med -> qtd) != 1){
+        fclose(arquivo_medicos);
+        return false;
+    }
+    if (fscanf(arquivo_medicos, " CAP: %d", &vetor_med -> cap) != 1){
+        fclose(arquivo_medicos);
+        return false;
+    } 
+    
+    vetor_med -> ponteiro_med = malloc(vetor_med -> cap * sizeof(Medico));
+    if (vetor_med -> ponteiro_med == NULL){
+        printf("Falha na alocacao de memoria, fechando o programa");
+        fclose(arquivo_medicos);
+        exit(EXIT_FAILURE);
+    }
+    int i;
+    for (i = 0; i < vetor_med -> qtd; i++){
+        Medico dados_medico;
+        fscanf(arquivo_medicos, " -----\n");
+        fscanf(arquivo_medicos, " ID: %d\n", &dados_medico.id);  
+        fscanf(arquivo_medicos, " NOME: %[^\n]\n", dados_medico.nome);  
+        fscanf(arquivo_medicos, " ESPECIALIDADE: %d %*[^\n]\n", &dados_medico.especialidade);  
+        fscanf(arquivo_medicos, " TURNO DA MANHA: %d:%d ate %d:%d\n",
+        &dados_medico.Inicio_Manha.hora, &dados_medico.Inicio_Manha.minuto,
+        &dados_medico.Fim_Manha.hora, &dados_medico.Fim_Manha.minuto);  
+        fscanf(arquivo_medicos, " TURNO DA TARDE: %d:%d ate %d:%d\n",
+        &dados_medico.Inicio_Tarde.hora, &dados_medico.Inicio_Tarde.minuto,
+        &dados_medico.Fim_Tarde.hora, &dados_medico.Fim_Tarde.minuto);          
+        vetor_med -> ponteiro_med[i] = dados_medico;
+    }
+    fclose(arquivo_medicos);
+    return true;
+}
