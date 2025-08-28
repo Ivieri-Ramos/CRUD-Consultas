@@ -6,7 +6,9 @@ int main(){
     VetPacientes vetor_pacientes = {NULL, 0, 0};
     VetConsultas vetor_consultas = {NULL, 0, 0};
     redimensionar_vetores(&vetor_medicos, MEDICO);
-    redimensionar_vetores(&vetor_pacientes, PACIENTE);
+    if(!carregar_pacientes(&vetor_pacientes)){
+        redimensionar_vetores(&vetor_pacientes, PACIENTE);
+    }
     redimensionar_vetores(&vetor_consultas, CONSULTA);
 
     while(1){
@@ -31,7 +33,7 @@ int main(){
                 break;
             }
             case MENU_BACKUP:{ //realizar backup do sistema
-                
+                salvar_pacientes(&vetor_pacientes);               
                 break;
             }    
             case MENU_FINALIZAR:{ //finalizar programa

@@ -133,6 +133,7 @@ Consulta *ponteiro_con;
 int qtd; 
 int cap;
 } VetConsultas;
+
 /*
 typedef struct {
 int duracaoPadraoMin; // ex.: 30 minutos
@@ -163,6 +164,8 @@ void switch_medico(VetMedicos *vetor_med);
 //------------------------------------------------
 //switch de pacientes.c
 void switch_paciente(VetPacientes *vetor_pac);
+bool carregar_pacientes(VetPacientes *vetor_pac);
+bool salvar_pacientes(const VetPacientes *vetor_pac);
 
 //------------------------------------------------
 //switch de consultas.c

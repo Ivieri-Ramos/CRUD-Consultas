@@ -220,5 +220,64 @@ static void atualizar_paciente(VetPacientes *vetor_pac){
     imprimir_paciente(vetor_pac -> ponteiro_pac[i]);
     pausar_e_limpar_buffer();
     Limpar_Tela();
-
 }
+
+bool salvar_pacientes(const VetPacientes *vetor_pac){
+    FILE *arquivo_pacientes = fopen("pacientes.txt", "w");
+    int i;
+    if (arquivo_pacientes == NULL){
+        printf("Nao foi possivel ler o arquivo de pacientes\n");
+        return false;
+    }
+    fprintf(arquivo_pacientes, "QTD: %d\n", vetor_pac -> qtd);
+    fprintf(arquivo_pacientes, "CAP: %d\n", vetor_pac -> cap);
+
+    for (i = 0; i < vetor_pac -> qtd; i++){
+        Paciente dados_paciente = vetor_pac -> ponteiro_pac[i];
+        fprintf(arquivo_pacientes, "-----\n");
+        fprintf(arquivo_pacientes, "ID: %d\n", dados_paciente.id);  
+        fprintf(arquivo_pacientes, "NOME: %s\n", dados_paciente.nome);  
+        fprintf(arquivo_pacientes, "EMAIL: %s\n", dados_paciente.email);  
+        fprintf(arquivo_pacientes, "TELEFONE: %s\n", dados_paciente.telefone);  
+    }
+    fprintf(arquivo_pacientes, "-----\n");
+    fclose(arquivo_pacientes);
+    return true;
+}
+
+bool carregar_pacientes(VetPacientes *vetor_pac){
+    FILE *arquivo_pacientes = fopen("pacientes.txt", "r");
+    if (arquivo_pacientes == NULL){
+        printf("Nao foi possivel carregar o arquivo de pacientes");
+        return false;
+    }   
+    
+    if (fscanf(arquivo_pacientes, " QTD: %d", &vetor_pac -> qtd) != 1){
+        fclose(arquivo_pacientes);
+        return false;
+    }
+    if (fscanf(arquivo_pacientes, " CAP: %d", &vetor_pac -> cap) != 1){
+        fclose(arquivo_pacientes);
+        return false;
+    } 
+    
+    vetor_pac -> ponteiro_pac = malloc(vetor_pac -> cap * sizeof(Paciente));
+    if (vetor_pac -> ponteiro_pac == NULL){
+        printf("Falha na alocacao de memoria, fechando o programa");
+        fclose(arquivo_pacientes);
+        exit(EXIT_FAILURE);
+    }
+    int i;
+    for (i = 0; i < vetor_pac -> qtd; i++){
+        Paciente dados_paciente;
+        fscanf(arquivo_pacientes, " -----\n");
+        fscanf(arquivo_pacientes, " ID: %d\n", &dados_paciente.id);  
+        fscanf(arquivo_pacientes, " NOME: %[^\n]\n", dados_paciente.nome);  
+        fscanf(arquivo_pacientes, " EMAIL: %[^\n]\n", dados_paciente.email);  
+        fscanf(arquivo_pacientes, " TELEFONE: %[^\n]\n", dados_paciente.telefone);  
+        vetor_pac -> ponteiro_pac[i] = dados_paciente;
+    }
+
+    fclose(arquivo_pacientes);
+    return true;
+    }
