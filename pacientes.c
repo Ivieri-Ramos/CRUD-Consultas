@@ -1,5 +1,6 @@
 #include "esqueleto.h"
 
+//funcoes privadas de paciente
 static void adicionar_paciente(VetPacientes *ptr);
 static void imprimir_paciente(Paciente dado);
 static void remover_paciente(VetPacientes *vetor_pac);

@@ -1,5 +1,6 @@
 #include "esqueleto.h"
 
+//funcoes privada de medico
 static void adicionar_medico(VetMedicos *ptr);
 static void imprimir_medico(Medico dado);
 static void listar_medico_especifico(VetMedicos *vetor_med);

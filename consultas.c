@@ -1,5 +1,6 @@
 #include "esqueleto.h"
 
+//funcoes privadas de consulta
 static void listar_consulta_especifica(VetConsultas *vetor_con);
 static void mudar_status(VetConsultas *vetor_con);
 static void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
@@ -106,7 +107,15 @@ static void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac,
         return;                
     }
     Data nova_data;
-    ler_data(&nova_data);
+    while(1){
+        if(!ler_data(&nova_data)){
+            printf("Digite uma data valida!\n");
+        }
+            else{
+                break;
+            }
+    }
+
     Limpar_Tela();
 
     Horario novo_horario;
@@ -121,7 +130,7 @@ static void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac,
             }
     }
     
-    int fim_min = hora_para_minutos(novo_horario);
+    int fim_min = hora_para_minutos(novo_horario) + DURACAO_CONSULTA;
 
     vetor_con -> ponteiro_con[ic].inicio = novo_horario;  
     vetor_con -> ponteiro_con[ic].fim.hora = fim_min / 60; 
@@ -130,6 +139,7 @@ static void adicionar_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac,
     vetor_con -> ponteiro_con[ic].status = CONS_AGENDADA;
     vetor_con -> ponteiro_con[ic].id_Medico = vetor_med -> ponteiro_med[im].id;
     vetor_con -> ponteiro_con[ic].id_Paciente = vetor_pac -> ponteiro_pac[ip].id;
+    vetor_con -> ponteiro_con[ic].data = nova_data;
     vetor_con -> qtd++;
     
     Limpar_Tela();
@@ -158,9 +168,9 @@ static bool ler_data(Data *ptr){
             ptr -> mes > MAIOR_MES ||
             ptr -> ano < MENOR_ANO ||
             ptr -> ano > MAIOR_ANO){
+            Limpar_Tela();
             printf("Formato invalido, por favor, digite no formato DD/MM/AA dentro do limite permitido!\n");
             printf("Digite aqui: ");
-            Limpar_Tela();
         }
             else{
             break;
@@ -195,8 +205,7 @@ static bool definir_hora_completa(VetConsultas *vetor_con, Medico *vetor_med, Da
             if (consulta_existente.id_Medico == vetor_med -> id &&
                 consulta_existente.data.dia == data_selecionada.dia &&
                 consulta_existente.data.mes == data_selecionada.mes &&
-                consulta_existente.data.ano == data_selecionada.ano
-                ){
+                consulta_existente.data.ano == data_selecionada.ano){
                 
                 int medico_inicio_horario = hora_para_minutos(vetor_con -> ponteiro_con[i].inicio);
                 int medico_fim_horario = hora_para_minutos(vetor_con -> ponteiro_con[i].fim);
@@ -246,7 +255,7 @@ static bool definir_hora_consulta(Horario *ptr_con, Medico *ptr_med){
                 break;
             }
             else{
-                printf("Horario invalido, por favor, digite um horario dentro do expediente medico;");
+                printf("Horario invalido, por favor, digite um horario dentro do expediente medico!\n");
             }
     }
     Limpar_Tela();    
@@ -380,6 +389,7 @@ static void atualizar_consulta(VetConsultas *vetor_con, VetMedicos *vetor_med){
 
     Data data_con;
     if (!ler_data(&data_con)){
+        data_con = vetor_con -> ponteiro_con[i].data;
     }
         else{
             printf("Data atualizada com sucesso!");
@@ -387,14 +397,15 @@ static void atualizar_consulta(VetConsultas *vetor_con, VetMedicos *vetor_med){
         }
     Limpar_Tela();
 
-    int im = vetor_con -> ponteiro_con[i].id_Medico;
+    int im;
+    im = buscar_indice_por_id(vetor_med, MEDICO, vetor_con -> ponteiro_con[i].id_Medico);
     Horario atualizar_horario;
-    if (!definir_hora_completa(vetor_con, &vetor_med -> ponteiro_med[im], data_con, i, &atualizar_horario)){
+    if (!definir_hora_completa(vetor_con, &vetor_med -> ponteiro_med[im], data_con, vetor_con -> ponteiro_con[i].num_consulta, &atualizar_horario)){
     }
         else{
             printf("Horario atualizado com sucesso!");
             vetor_con -> ponteiro_con[i].inicio = atualizar_horario;
-            int fim_min = hora_para_minutos(atualizar_horario);
+            int fim_min = hora_para_minutos(atualizar_horario) + DURACAO_CONSULTA;
             vetor_con -> ponteiro_con[i].fim.hora = fim_min / 60;
             vetor_con -> ponteiro_con[i].fim.minuto = fim_min % 60;
         }
@@ -404,4 +415,84 @@ static void atualizar_consulta(VetConsultas *vetor_con, VetMedicos *vetor_med){
     imprimir_consulta(vetor_con -> ponteiro_con[i]);
     pausar_e_limpar_buffer();
     Limpar_Tela();
+}
+
+bool salvar_consultas(const VetConsultas *vetor_con){
+    FILE *arquivo_consultas = fopen("consultas.txt", "w");
+    if (arquivo_consultas == NULL){
+        printf("Nao foi possivel ler o arquivo de medicos\n");
+        return false;
+    }
+
+    fprintf(arquivo_consultas, "QTD: %d\n", vetor_con -> qtd);
+    fprintf(arquivo_consultas, "CAP: %d\n", vetor_con -> cap);
+    
+    int i;
+    for (i = 0; i < vetor_con -> qtd; i++){
+        Consulta dados_consulta = vetor_con -> ponteiro_con[i];
+        fprintf(arquivo_consultas, "-----\n");
+        fprintf(arquivo_consultas, "NUMERO DA CONSULTA: %d\n", dados_consulta.num_consulta);  
+        fprintf(arquivo_consultas, "ID PACIENTE: %d\n", dados_consulta.id_Paciente);  
+        fprintf(arquivo_consultas, "ID MEDICO: %d\n", dados_consulta.id_Medico);  
+        fprintf(arquivo_consultas, "DATA DA CONSULTA: %02d/%02d/%02d\n", 
+        dados_consulta.data.dia, dados_consulta.data.mes, dados_consulta.data.ano); 
+        fprintf(arquivo_consultas, "INICIO DA CONSULTA: %02d:%02d\n", 
+        dados_consulta.inicio.hora, dados_consulta.inicio.minuto);
+        fprintf(arquivo_consultas, "FIM DA CONSULTA: %02d:%02d\n", 
+        dados_consulta.fim.hora, dados_consulta.fim.minuto);
+        fprintf(arquivo_consultas, "STATUS DA CONSULTA: %d ", dados_consulta.status);
+        switch (dados_consulta.status){
+            case CONS_AGENDADA: fprintf(arquivo_consultas, "(CONSULTA AGENDADA)\n"); break;
+            case CONS_CONCLUIDA: fprintf(arquivo_consultas, "(CONSULTA CONCLUIDA)\n"); break;
+            case CONS_CANCELADA: fprintf(arquivo_consultas, "(CONSULTA CANCELADA)\n"); break;
+            case CONS_FALTA: fprintf(arquivo_consultas, "(PACIENTE FALTOU A CONSULTA)\n"); break;
+        }
+    }
+    fprintf(arquivo_consultas, "-----\n");
+    fclose(arquivo_consultas);
+    return true;
+}
+
+bool carregar_consultas(VetConsultas *vetor_con){
+    FILE *arquivo_consultas = fopen("consultas.txt", "r");
+    if (arquivo_consultas == NULL){
+        printf("Nao foi possivel carregar o arquivo de consultas");
+        return false;
+    }   
+    
+    if (fscanf(arquivo_consultas, " QTD: %d", &vetor_con -> qtd) != 1){
+        fclose(arquivo_consultas);
+        return false;
+    }
+    if (fscanf(arquivo_consultas, " CAP: %d", &vetor_con -> cap) != 1){
+        fclose(arquivo_consultas);
+        return false;
+    } 
+    
+    vetor_con -> ponteiro_con = malloc(vetor_con -> cap * sizeof(Consulta));
+    if (vetor_con -> ponteiro_con == NULL){
+        printf("Falha na alocacao de memoria, fechando o programa");
+        fclose(arquivo_consultas);
+        exit(EXIT_FAILURE);
+    }
+    int i;
+    for (i = 0; i < vetor_con -> qtd; i++){
+        Consulta dados_consulta;
+        fscanf(arquivo_consultas, " -----\n");
+        fscanf(arquivo_consultas, " NUMERO DA CONSULTA: %d\n", &dados_consulta.num_consulta);  
+        fscanf(arquivo_consultas, " ID PACIENTE: %d\n", &dados_consulta.id_Paciente);  
+        fscanf(arquivo_consultas, " ID MEDICO: %d\n", &dados_consulta.id_Medico);  
+        fscanf(arquivo_consultas, " DATA DA CONSULTA: %d/%d/%d\n", 
+        &dados_consulta.data.dia, &dados_consulta.data.mes, &dados_consulta.data.ano);
+        fscanf(arquivo_consultas, " INICIO DA CONSULTA: %d:%d\n", 
+        &dados_consulta.inicio.hora, &dados_consulta.inicio.minuto);
+        fscanf(arquivo_consultas, " FIM DA CONSULTA: %d:%d\n",
+        &dados_consulta.fim.hora, &dados_consulta.fim.minuto);
+        fscanf(arquivo_consultas, " STATUS DA CONSULTA: %d %*[^\n]", &dados_consulta.status);
+
+        vetor_con -> ponteiro_con[i] = dados_consulta;
+    }
+
+    fclose(arquivo_consultas);
+    return true;
 }

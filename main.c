@@ -5,14 +5,15 @@ int main(){
     VetMedicos vetor_medicos = {NULL, 0, 0};
     VetPacientes vetor_pacientes = {NULL, 0, 0};
     VetConsultas vetor_consultas = {NULL, 0, 0};
-    redimensionar_vetores(&vetor_medicos, MEDICO);
     if(!carregar_pacientes(&vetor_pacientes)){
         redimensionar_vetores(&vetor_pacientes, PACIENTE);
     }
     if(!carregar_medicos(&vetor_medicos)){
         redimensionar_vetores(&vetor_medicos, MEDICO);
     }
-    redimensionar_vetores(&vetor_consultas, CONSULTA);
+    if(!carregar_consultas(&vetor_consultas)){
+        redimensionar_vetores(&vetor_consultas, CONSULTA);
+    }
 
     while(1){
         Limpar_Tela();
@@ -38,6 +39,7 @@ int main(){
             case MENU_BACKUP:{ //realizar backup do sistema
                 salvar_pacientes(&vetor_pacientes);               
                 salvar_medicos(&vetor_medicos);
+                salvar_consultas(&vetor_consultas);
                 break;
             }    
             case MENU_FINALIZAR:{ //finalizar programa

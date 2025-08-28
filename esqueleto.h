@@ -172,5 +172,7 @@ bool salvar_pacientes(const VetPacientes *vetor_pac);
 //------------------------------------------------
 //switch de consultas.c
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
+bool salvar_consultas(const VetConsultas *vetor_con);
+bool carregar_consultas(VetConsultas *vetor_con);
 
 #endif
