@@ -30,6 +30,7 @@ int main(){
                 break;
             }
             case MENU_BACKUP:{ //realizar backup do sistema
+                Limpar_Tela();
                 salvar_pacientes(&vetor_pacientes);               
                 salvar_medicos(&vetor_medicos);
                 salvar_consultas(&vetor_consultas);

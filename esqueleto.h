@@ -51,7 +51,15 @@ typedef enum {
     MENU
 } Acoes; //acoes para os cases do paciente e medico;
 
-#define MUDAR_STATUS REMOVER
+typedef enum {
+    ADICIONAR_CON = 1,
+    MUDAR_STATUS_CON,
+    LISTAR_TODOS_CON,
+    LISTAR_ESPECIFICO_CON,
+    LISTAR_DATA_CON,
+    ATUALIZAR_CON,
+    MENU_CON
+} Acoes_consultas; //renomeei tudo com consulta no final porque se nao ia dar pau
 
 typedef enum {
     MENU_MEDICO = 1,

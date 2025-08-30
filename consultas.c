@@ -11,6 +11,7 @@ static void imprimir_consulta(Consulta dado);
 static void listar_consultas(VetConsultas *vetor_con);
 static bool definir_hora_completa(VetConsultas *vetor_con, Medico *vetor_med, Data data_selecionada, int id_ignorado, Horario *horario_resultado);
 static void atualizar_consulta(VetConsultas *vetor_con, VetMedicos *vetor_med);
+static void listar_consulta_data(VetConsultas *vetor_con);
 
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med){
     int op;
@@ -21,38 +22,44 @@ void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedico
         printf("Digite 2 para mudar o status de uma consulta;\n");
         printf("Digite 3 para listar todos as consultas;\n");
         printf("Digite 4 para listar uma consulta especifica;\n");
-        printf("Digite 5 para atualizar uma consulta;\n");
-        printf("Digite 6 para voltar ao menu principal;\n");
+        printf("Digite 5 para listar consultas por uma data;\n");
+        printf("Digite 6 para atualizar uma consulta;\n");
+        printf("Digite 7 para voltar ao menu principal;\n");
         printf("Digite aqui: ");        
         buffer_completo(&op, ADICIONAR, MENU);
 
         switch (op){
-            case ADICIONAR:{
+            case ADICIONAR_CON:{
                 adicionar_consulta(vetor_con, vetor_pac, vetor_med);
                 Limpar_Tela();
                 break;
             }
-            case MUDAR_STATUS:{
+            case MUDAR_STATUS_CON:{
                 mudar_status(vetor_con);
                 Limpar_Tela();
                 break;
             }
-            case LISTAR_TODOS:{
+            case LISTAR_TODOS_CON:{
                 listar_consultas(vetor_con);
                 Limpar_Tela();
                 break;
             }
-            case LISTAR_ESPECIFICO:{
+            case LISTAR_ESPECIFICO_CON:{
                 listar_consulta_especifica(vetor_con);
                 Limpar_Tela();
                 break;
             }
-            case ATUALIZAR:{
+            case LISTAR_DATA_CON:{
+                listar_consulta_data(vetor_con);
+                Limpar_Tela();
+                break;
+            }
+            case ATUALIZAR_CON:{
                 Limpar_Tela();
                 atualizar_consulta(vetor_con, vetor_med);
                 break;
             }
-            case MENU:{
+            case MENU_CON:{
                 Limpar_Tela();
                 printf("Voltando para o menu...\n");
                 pausar_programa(2);
@@ -495,4 +502,43 @@ bool carregar_consultas(VetConsultas *vetor_con){
 
     fclose(arquivo_consultas);
     return true;
+}
+
+static void listar_consulta_data(VetConsultas *vetor_con){
+    Limpar_Tela();
+    if (vetor_con -> qtd == 0){
+        printf("Nao ha nenhuma consulta cadastrada, retornando ao menu...");
+        pausar_programa(2);
+        Limpar_Tela();
+        return;
+    }
+
+    printf("Digite a data que deseja listar no formato DD/MM/AA: ");
+    Data data_procurada;
+    while(1){
+        if(!ler_data(&data_procurada)){
+            printf("Digite uma data valida!\n");
+        }
+            else{
+                break;
+            }
+    }
+    Limpar_Tela();
+    int i;
+    bool data_existe = false;
+    for (i = 0; i < vetor_con -> qtd; i++){
+        if (data_procurada.dia == vetor_con -> ponteiro_con[i].data.dia &&
+        data_procurada.mes == vetor_con -> ponteiro_con[i].data.mes &&
+        data_procurada.ano == vetor_con -> ponteiro_con[i].data.ano){
+            imprimir_consulta(vetor_con -> ponteiro_con[i]);
+            data_existe = true;
+        }
+    }
+    if (!data_existe){
+        printf("Data digitada nao existe, retornando ao menu...");
+        pausar_programa(2);
+        return;
+    }
+    pausar_e_limpar_buffer();
+    Limpar_Tela();
 }
