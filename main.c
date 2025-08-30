@@ -7,6 +7,7 @@ int main(){
     VetConsultas vetor_consultas = {NULL, 0, 0};
 
     carregar_vetores(&vetor_medicos, &vetor_pacientes, &vetor_consultas);
+    validar_consultas(&vetor_consultas, &vetor_medicos, &vetor_pacientes);
 
     while(1){
         Limpar_Tela();

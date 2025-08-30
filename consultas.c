@@ -15,6 +15,7 @@ static void listar_consulta_data(VetConsultas *vetor_con);
 
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med){
     int op;
+    validar_consultas(vetor_con, vetor_med, vetor_pac);
     while(1){
         Limpar_Tela();
         printf("----- Menu das consultas -----\n\n");
@@ -535,10 +536,39 @@ static void listar_consulta_data(VetConsultas *vetor_con){
         }
     }
     if (!data_existe){
-        printf("Data digitada nao existe, retornando ao menu...");
+        printf("Nenhuma consulta encontrada para esta data, retornando ao menu...");
         pausar_programa(2);
         return;
     }
     pausar_e_limpar_buffer();
     Limpar_Tela();
+}
+
+void validar_consultas(VetConsultas *vetor_con, VetMedicos *vetor_med, VetPacientes *vetor_pac) {
+    int i = 0;
+    int consultas_removidas = 0;
+
+    while (i < vetor_con -> qtd) {
+        Consulta consulta_atual = vetor_con->ponteiro_con[i];
+
+        int indice_medico = buscar_indice_por_id(vetor_med, MEDICO, consulta_atual.id_Medico);
+        int indice_paciente = buscar_indice_por_id(vetor_pac, PACIENTE, consulta_atual.id_Paciente);
+
+        if (indice_medico != -1 && indice_paciente != -1) {
+            i++;
+        } else {
+            consultas_removidas++;
+            for (int j = i; j < vetor_con->qtd - 1; j++) {
+                vetor_con->ponteiro_con[j] = vetor_con->ponteiro_con[j + 1];
+            }
+            vetor_con->qtd--;
+            
+        }
+    }
+
+    if (consultas_removidas > 0) {
+        Limpar_Tela();
+        printf("Aviso: %d consulta(s) foram removidas pois o medico ou paciente nao existe mais.\n", consultas_removidas);
+        pausar_programa(3);
+    }
 }

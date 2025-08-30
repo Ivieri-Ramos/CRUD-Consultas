@@ -167,21 +167,22 @@ bool string_vazia(const char buffer[]);
 void carregar_vetores(VetMedicos *vetor_med, VetPacientes *vetor_pac, VetConsultas *vetor_con);
 
 //-----------------------------------------------
-//switch de medicos.c
+//funcoes fora de medicos.c
 void switch_medico(VetMedicos *vetor_med);
 bool carregar_medicos(VetMedicos *vetor_med);
 bool salvar_medicos(const VetMedicos *vetor_med);
 
 //------------------------------------------------
-//switch de pacientes.c
+//funcoes fora de pacientes.c
 void switch_paciente(VetPacientes *vetor_pac);
 bool carregar_pacientes(VetPacientes *vetor_pac);
 bool salvar_pacientes(const VetPacientes *vetor_pac);
 
 //------------------------------------------------
-//switch de consultas.c
+//funcoes fora de consultas.c
 void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedicos *vetor_med);
 bool salvar_consultas(const VetConsultas *vetor_con);
 bool carregar_consultas(VetConsultas *vetor_con);
+void validar_consultas(VetConsultas *vetor_con, VetMedicos *vetor_med, VetPacientes *vetor_pac);
 
 #endif
