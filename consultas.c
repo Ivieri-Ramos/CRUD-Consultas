@@ -27,7 +27,7 @@ void switch_consulta(VetConsultas *vetor_con, VetPacientes *vetor_pac, VetMedico
         printf("Digite 6 para atualizar uma consulta;\n");
         printf("Digite 7 para voltar ao menu principal;\n");
         printf("Digite aqui: ");        
-        buffer_completo(&op, ADICIONAR, MENU);
+        buffer_completo(&op, ADICIONAR, MENU_CON);
 
         switch (op){
             case ADICIONAR_CON:{
