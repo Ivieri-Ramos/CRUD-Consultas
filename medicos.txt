@@ -1,9 +1,0 @@
-QTD: 1
-CAP: 10
------
-ID: 1
-NOME: ivieri
-ESPECIALIDADE: 3 (Especialista cardiologista)
-TURNO DA MANHA: 08:00 ate 10:00
-TURNO DA TARDE: 15:00 ate 17:00
------

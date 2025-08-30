@@ -1,9 +1,0 @@
-5. urgencia caso haja 
-6. receber arquivos .txt
-1. listar as consultas por medico e data.
-.\CRUDRENE.exe
------------------------------------------------------------------------------------------------
-
-horario da consulta definir por parametro de disponibilidade do medico
-se ha alguma consulta naquele horario
-verificar se  manha ou tarde pode facilitar
