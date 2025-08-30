@@ -207,3 +207,15 @@ bool string_vazia(const char buffer[]){
     }
     return true;
 }
+
+void carregar_vetores(VetMedicos *vetor_med, VetPacientes *vetor_pac, VetConsultas *vetor_con){
+    if(!carregar_pacientes(vetor_pac)){
+    redimensionar_vetores(vetor_pac, PACIENTE);
+    }
+    if(!carregar_medicos(vetor_med)){
+        redimensionar_vetores(vetor_med, MEDICO);
+    }
+    if(!carregar_consultas(vetor_con)){
+        redimensionar_vetores(vetor_con, CONSULTA);
+    }
+}

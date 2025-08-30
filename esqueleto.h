@@ -156,6 +156,7 @@ void pausar_programa(int segundos);
 void pausar_e_limpar_buffer();
 int buscar_indice_por_id(void *ptr, int tipo, int id_procurado);
 bool string_vazia(const char buffer[]);
+void carregar_vetores(VetMedicos *vetor_med, VetPacientes *vetor_pac, VetConsultas *vetor_con);
 
 //-----------------------------------------------
 //switch de medicos.c
